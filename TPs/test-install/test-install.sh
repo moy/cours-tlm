@@ -74,7 +74,7 @@ start_test MicroBlaze compilation
 "$CROSS_COMPILE"gcc "$DIR"/test-microblaze.c -o test-microblaze || die "Can't cross-compile with $CROSS_COMPILE"gcc
 test -x test-microblaze || die "Executable file not generated"
 "$CROSS_COMPILE"objdump -d test-microblaze > actual || die "Can't disassemble with $CROSS_COMPILE"objdump
-grep -q '^[0-9a-zA-Z]* *<main>: *$' actual || die "Dissassembly does'nt contain main function"
+grep -q '^[0-9a-zA-Z]* *<main>: *$' actual || die "Dissassembly doesn't contain main function"
 test_ok
 
 echo "All tests passed successfully"
