@@ -50,7 +50,7 @@ diff actual expected || die "Incorrect output from SystemC program"
 test_ok
 
 start_test X11
-gcc "$DIR"/test-x11.cpp -o test-x11 -lX11 || die "Can't compile a program using X11. Do you have libx11-dev installed?"
+g++ "$DIR"/test-x11.cpp -o test-x11 -lX11 || die "Can't compile a program using X11. Do you have libx11-dev installed?"
 ./test-x11 || die "Can't execute a program using X11. Your installation of X11 is seriously broken :-(."
 test_ok
 
@@ -65,7 +65,7 @@ test -n "$CROSS_COMPILE" || die "Please, set \$CROSS_COMPILE to e.g. microblaze-
 check_cmd () {
     command -v "$CROSS_COMPILE""$1" >/dev/null || die "Can't find $CROSS_COMPILEg++"
 }
-check_cmd g++
+check_cmd ld
 check_cmd gcc
 check_cmd objdump
 test_ok
