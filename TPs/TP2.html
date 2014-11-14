@@ -1,10 +1,12 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <meta http-equiv="Content-Style-Type" content="text/css" />
-  <meta name="generator" content="pandoc" />
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
   <title></title>
+  <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
 </head>
 <body>
 <p>Placez-vous dans le répertoire <code>TPs/squelette/tp2</code>. Comme précédemment, il faudra positionner quelques variables d’environnement avec le fichier <code>setup.sh</code> adapté à votre machine, par exemple :</p>
@@ -27,7 +29,7 @@
 <li><p>10 Kio sont réservés pour les données du logiciel embarqué (cette partie sera inutilisée dans notre plate-forme qui ne modélise pas le logiciel embarqué fidèlement).</p></li>
 <li><p>La mémoire vidéo utilise un codage d’1 octet par pixel, donc sa taille sera <span class="math">320 * 240 = 76800</span>.</p></li>
 </ul>
-<p>La taille suffisante pour la mémoire est donc 81920 = 0x15400. Modifiez la taille de la mémoire et la plage d’adresse correspondante (<code>bus.map()</code>) dans <code>sc_main()</code>.</p>
+<p>La taille nécessaire pour la mémoire est donc 87040 = 0x15400. Modifiez la taille de la mémoire et la plage d’adresse correspondante (<code>bus.map()</code>) dans <code>sc_main()</code>.</p>
 <p>Le LCDC n’expose qu’un (petit) banc de registres. Calculez la taille nécessaire d’après la documentation, et adaptez la plage d’adresse.</p>
 <h2 id="question-3-modélisation-du-registre-start_reg-du-lcdc">Question 3 : modélisation du registre <code>START_REG</code> du LCDC</h2>
 <p>Dans la version récupérée du contrôleur LCD, il manque l’implémentation du registre <code>START_REG</code> (voir documentation).</p>
