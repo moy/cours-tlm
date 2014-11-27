@@ -1,0 +1,12 @@
+################################################################################
+##
+## Copyright (c) 2003,2004 Xilinx.  All rights reserved.  
+##
+## my_dcm.pao
+##
+## Peripheral Analyze Order
+##
+################################################################################
+
+## lib common_v1_00_a common_types_pkg
+lib dcm_module_v1_00_a dcm_module

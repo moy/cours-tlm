@@ -6,7 +6,8 @@
 #include <map>
 
 SC_MODULE(Bus) {
-
+	// The bus is the only component needing this "true" template
+	// parameter, to allow multi-port connections.
 	ensitlm::initiator_socket<Bus, true> initiator;
 	ensitlm::target_socket<Bus, true> target;
 

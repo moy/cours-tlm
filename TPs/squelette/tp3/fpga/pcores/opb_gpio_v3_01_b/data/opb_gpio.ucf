@@ -1,0 +1,10 @@
+
+NET "OPB_Clk" TNM_NET = "OPB_Clk";
+TIMESPEC "TS_OPB_clk" = PERIOD "OPB_Clk" 8 ns HIGH 50 %;
+
+# Don't Register in IOB
+INST "*" IOB=FALSE;
+
+TEMPERATURE = 85 ; #Worst case
+VOLTAGE = 1.425 ; #Worst case
+

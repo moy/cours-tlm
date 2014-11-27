@@ -1,0 +1,30 @@
+Plateforme TLM avec ISS pour Microblaze.
+
+fpga/ => la "vraie" plateforme, sur FPGA.
+
+hardware/ => les composants HW de la plateforme.
+
+native-wrapper/ => le toplevel et les composants spécifiques au
+  wrapper natif.
+
+iss/ => toplevel et composants spécifiques à l'ISS microblaze:
+
+  microblaze.{cpp,h} est l'ISS de soclib, essentiellement, c'est une
+    classe avec une fonction step() appelée depuis l'extérieur. Si on
+    définie MBDEBUG à 1 dans ce fichier, l'ISS affiche l'éxécution du
+    code pas à pas.
+
+  mb_wrapper.{cpp,h} c'est mon (Matthieu Moy) wrapper, avec une
+    interface BASIC d'un côté, et appelle step() de l'autre (largement
+    basé sur soclib/vci_iss_nocache.* récupéré dans soclib). Son
+    principal rôle est de faire while(true) {wait(...); iss.step();}.
+
+elf-loader/ => le chargeur de fichier elf et ses dépendances. Utilisé par
+  Memory.cpp pour charger le logiciel embarqué au format ELF.
+
+software/ => le logiciel embarqué.
+
+software/cross/ => le nécessaire pour la cross-compilation du logiciel
+  embarqué.
+
+software/native/ => le nécessaire pour la compilation en wrapper natif.

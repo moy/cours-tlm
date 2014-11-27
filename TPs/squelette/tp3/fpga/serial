@@ -1,0 +1,4 @@
+#! /bin/sh
+echo "Serial port 0, no stop bit, 115200bps, no parity"
+echo "Type ~. to disconnect."
+cu --line=/dev/ttyS0 --nostop --speed=115200 --parity=none

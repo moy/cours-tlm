@@ -1,0 +1,56 @@
+##############################################################################
+## Filename:          /nfs/ensiens/perms/funchal/ensilinux/fpga/pcores/opb_vga_v1_00_a/data/opb_vga_v2_1_0.pao
+## Description:       Peripheral Analysis Order
+## Date:              Fri Sep 18 13:29:40 2009 (by Create and Import Peripheral Wizard)
+##############################################################################
+
+lib proc_common_v1_00_b proc_common_pkg vhdl
+lib proc_common_v1_00_b direct_path_cntr vhdl
+lib proc_common_v1_00_b srl_fifo vhdl
+lib proc_common_v1_00_b srl_fifo_rbu vhdl
+lib proc_common_v1_00_b pselect vhdl
+lib proc_common_v1_00_b ld_arith_reg vhdl
+lib proc_common_v1_00_b ld_arith_reg2 vhdl
+lib proc_common_v1_00_b down_counter vhdl
+lib proc_common_v1_00_b inferred_lut4 vhdl
+lib proc_common_v1_00_b or_muxcy vhdl
+lib proc_common_v1_00_b or_gate vhdl
+lib proc_common_v1_00_b family vhdl
+lib ipif_common_v1_00_d ipif_pkg vhdl
+lib ipif_common_v1_00_d interrupt_control vhdl
+lib ipif_common_v1_00_d ipif_steer vhdl
+lib ipif_common_v1_00_d dma_sg_pkg vhdl
+lib ipif_common_v1_00_d dma_sg_cmp vhdl
+lib ipif_common_v1_00_d ctrl_reg vhdl
+lib ipif_common_v1_00_d burst_size_calc vhdl
+lib ipif_common_v1_00_d dma_sg vhdl
+lib ipif_common_v1_00_d dma_sg_sim vhdl
+lib opb_ipif_v2_00_h address_decoder vhdl
+lib opb_ipif_v2_00_h slave_attachment vhdl
+lib opb_ipif_v2_00_h pf_counter_bit vhdl
+lib opb_ipif_v2_00_h pf_counter vhdl
+lib opb_ipif_v2_00_h pf_counter_top vhdl
+lib opb_ipif_v2_00_h pf_occ_counter vhdl
+lib opb_ipif_v2_00_h pf_occ_counter_top vhdl
+lib opb_ipif_v2_00_h pf_adder_bit vhdl
+lib opb_ipif_v2_00_h pf_adder vhdl
+lib opb_ipif_v2_00_h pf_dpram_select vhdl
+lib opb_ipif_v2_00_h srl16_fifo vhdl
+lib opb_ipif_v2_00_h pf_dly1_mux vhdl
+lib opb_ipif_v2_00_h rdpfifo_dp_cntl vhdl
+lib opb_ipif_v2_00_h ipif_control_rd vhdl
+lib opb_ipif_v2_00_h rdpfifo_top vhdl
+lib opb_ipif_v2_00_h wrpfifo_dp_cntl vhdl
+lib opb_ipif_v2_00_h ipif_control_wr vhdl
+lib opb_ipif_v2_00_h wrpfifo_top vhdl
+lib opb_ipif_v2_00_h bus2ip_amux vhdl
+lib opb_ipif_v2_00_h ip2bus_dmux vhdl
+lib opb_ipif_v2_00_h ip2bus_dmux_blk vhdl
+lib opb_ipif_v2_00_h ip2bus_srmux vhdl
+lib opb_ipif_v2_00_h ip2bus_srmux_blk vhdl
+lib opb_ipif_v2_00_h ipif_reset vhdl
+lib opb_ipif_v2_00_h reset_control vhdl
+lib opb_ipif_v2_00_h addr_load_and_incr vhdl
+lib opb_ipif_v2_00_h master_attachment vhdl
+lib opb_ipif_v2_00_h opb_ipif vhdl
+lib opb_vga_v1_00_a opb_vga vhdl

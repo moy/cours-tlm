@@ -1,0 +1,9 @@
+-p
+xc3s1000ft256-4
+-lang
+vhdl
+-lp
+pcores/
+-st
+xst
+system.mhs

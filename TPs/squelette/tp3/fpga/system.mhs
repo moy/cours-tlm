@@ -1,0 +1,256 @@
+# ##############################################################################
+# Created by Base System Builder Wizard for Xilinx EDK 8.1.02 Build EDK_I.20.4
+# Thu Sep 17 17:24:45 2009
+# Target Board:  Xilinx Spartan-3 Starter Board Rev E
+# Family:	 spartan3
+# Device:	 xc3s200
+# Package:	 ft256
+# Speed Grade:	 -4
+# Processor: Microblaze
+# System clock frequency: 50.000000 MHz
+# Debug interface: No Debug
+# On Chip Memory :   8 KB
+# Total Off Chip Memory :   1 MB
+# - SRAM_256Kx32 =   1 MB
+# ##############################################################################
+
+
+ PARAMETER VERSION = 2.1.0
+
+
+ PORT fpga_0_RS232_RX_pin = fpga_0_RS232_RX, DIR = I
+ PORT fpga_0_RS232_TX_pin = fpga_0_RS232_TX, DIR = O
+ PORT fpga_0_LEDs_8Bit_GPIO_d_out_pin = fpga_0_LEDs_8Bit_GPIO_d_out, DIR = O, VEC = [0:7]
+ PORT fpga_0_LED_7SEGMENT_GPIO_d_out_pin = fpga_0_LED_7SEGMENT_GPIO_d_out, DIR = O, VEC = [0:11]
+ PORT fpga_0_Push_Buttons_3Bit_GPIO_in_pin = fpga_0_Push_Buttons_3Bit_GPIO_in, DIR = I, VEC = [0:2]
+ PORT fpga_0_DIP_Switches_8Bit_GPIO_in_pin = fpga_0_DIP_Switches_8Bit_GPIO_in, DIR = I, VEC = [0:7]
+ PORT fpga_0_SRAM_256Kx32_Mem_A_pin = fpga_0_SRAM_256Kx32_Mem_A, DIR = O, VEC = [12:29]
+ PORT fpga_0_SRAM_256Kx32_Mem_DQ_pin = fpga_0_SRAM_256Kx32_Mem_DQ, DIR = IO, VEC = [0:31]
+ PORT fpga_0_SRAM_256Kx32_Mem_OEN_pin = fpga_0_SRAM_256Kx32_Mem_OEN, DIR = O, VEC = [0:0]
+ PORT fpga_0_SRAM_256Kx32_Mem_CEN_pin = fpga_0_SRAM_256Kx32_Mem_CEN, DIR = O, VEC = [0:0]
+ PORT fpga_0_SRAM_256Kx32_Mem_CEN_1_pin = fpga_0_SRAM_256Kx32_Mem_CEN, DIR = O, VEC = [0:0]
+ PORT fpga_0_SRAM_256Kx32_Mem_WEN_pin = fpga_0_SRAM_256Kx32_Mem_WEN, DIR = O
+ PORT fpga_0_SRAM_256Kx32_Mem_BEN_pin = fpga_0_SRAM_256Kx32_Mem_BEN, DIR = O, VEC = [0:3]
+ PORT sys_clk_pin = dcm_clk_s, DIR = I, SIGIS = DCMCLK
+ PORT sys_rst_pin = sys_rst_s, DIR = I
+ PORT vga_hsync_pin = opb_vga_0_HSYNC, DIR = O
+ PORT vga_vsync_pin = opb_vga_0_VSYNC, DIR = O
+ PORT vga_red_pin = opb_vga_0_RED, DIR = O
+ PORT vga_green_pin = opb_vga_0_GREEN, DIR = O
+ PORT vga_blue_pin = opb_vga_0_BLUE, DIR = O
+
+
+BEGIN microblaze
+ PARAMETER INSTANCE = microblaze_0
+ PARAMETER HW_VER = 4.00.a
+ PARAMETER C_USE_FPU = 0
+ BUS_INTERFACE DLMB = dlmb
+ BUS_INTERFACE ILMB = ilmb
+ BUS_INTERFACE DOPB = mb_opb
+ BUS_INTERFACE IOPB = mb_opb
+ PORT CLK = sys_clk_s
+ PORT Interrupt = Interrupt
+END
+
+BEGIN lmb_v10
+ PARAMETER INSTANCE = ilmb
+ PARAMETER HW_VER = 1.00.a
+ PARAMETER C_EXT_RESET_HIGH = 1
+ PORT SYS_Rst = sys_rst_s
+ PORT LMB_Clk = sys_clk_s
+END
+
+BEGIN lmb_v10
+ PARAMETER INSTANCE = dlmb
+ PARAMETER HW_VER = 1.00.a
+ PARAMETER C_EXT_RESET_HIGH = 1
+ PORT SYS_Rst = sys_rst_s
+ PORT LMB_Clk = sys_clk_s
+END
+
+BEGIN lmb_bram_if_cntlr
+ PARAMETER INSTANCE = dlmb_cntlr
+ PARAMETER HW_VER = 1.00.b
+ PARAMETER C_BASEADDR = 0x00000000
+ PARAMETER C_HIGHADDR = 0x00003FFF
+ BUS_INTERFACE SLMB = dlmb
+ BUS_INTERFACE BRAM_PORT = dlmb_port
+END
+
+BEGIN lmb_bram_if_cntlr
+ PARAMETER INSTANCE = ilmb_cntlr
+ PARAMETER HW_VER = 1.00.b
+ PARAMETER C_BASEADDR = 0x00000000
+ PARAMETER C_HIGHADDR = 0x00003FFF
+ BUS_INTERFACE SLMB = ilmb
+ BUS_INTERFACE BRAM_PORT = ilmb_port
+END
+
+BEGIN bram_block
+ PARAMETER INSTANCE = lmb_bram
+ PARAMETER HW_VER = 1.00.a
+ BUS_INTERFACE PORTA = ilmb_port
+ BUS_INTERFACE PORTB = dlmb_port
+END
+
+BEGIN opb_v20
+ PARAMETER INSTANCE = mb_opb
+ PARAMETER HW_VER = 1.10.c
+ PARAMETER C_EXT_RESET_HIGH = 1
+ PORT SYS_Rst = sys_rst_s
+ PORT OPB_Clk = sys_clk_s
+END
+
+BEGIN opb_uartlite
+ PARAMETER INSTANCE = RS232
+ PARAMETER HW_VER = 1.00.b
+ PARAMETER C_BAUDRATE = 115200
+ PARAMETER C_DATA_BITS = 8
+ PARAMETER C_ODD_PARITY = 0
+ PARAMETER C_USE_PARITY = 0
+ PARAMETER C_CLK_FREQ = 50000000
+ PARAMETER C_BASEADDR = 0x40600000
+ PARAMETER C_HIGHADDR = 0x4060ffff
+ BUS_INTERFACE SOPB = mb_opb
+ PORT OPB_Clk = sys_clk_s
+ PORT Interrupt = RS232_Interrupt
+ PORT RX = fpga_0_RS232_RX
+ PORT TX = fpga_0_RS232_TX
+END
+
+BEGIN opb_gpio
+ PARAMETER INSTANCE = LEDs_8Bit
+ PARAMETER HW_VER = 3.01.b
+ PARAMETER C_GPIO_WIDTH = 8
+ PARAMETER C_IS_DUAL = 0
+ PARAMETER C_IS_BIDIR = 0
+ PARAMETER C_ALL_INPUTS = 0
+ PARAMETER C_BASEADDR = 0x40020000
+ PARAMETER C_HIGHADDR = 0x4002ffff
+ BUS_INTERFACE SOPB = mb_opb
+ PORT OPB_Clk = sys_clk_s
+ PORT GPIO_d_out = fpga_0_LEDs_8Bit_GPIO_d_out
+END
+
+BEGIN opb_gpio
+ PARAMETER INSTANCE = LED_7SEGMENT
+ PARAMETER HW_VER = 3.01.b
+ PARAMETER C_GPIO_WIDTH = 12
+ PARAMETER C_IS_DUAL = 0
+ PARAMETER C_IS_BIDIR = 0
+ PARAMETER C_ALL_INPUTS = 0
+ PARAMETER C_BASEADDR = 0x40040000
+ PARAMETER C_HIGHADDR = 0x4004ffff
+ BUS_INTERFACE SOPB = mb_opb
+ PORT OPB_Clk = sys_clk_s
+ PORT GPIO_d_out = fpga_0_LED_7SEGMENT_GPIO_d_out
+END
+
+BEGIN opb_gpio
+ PARAMETER INSTANCE = Push_Buttons_3Bit
+ PARAMETER HW_VER = 3.01.b
+ PARAMETER C_GPIO_WIDTH = 3
+ PARAMETER C_IS_DUAL = 0
+ PARAMETER C_IS_BIDIR = 0
+ PARAMETER C_ALL_INPUTS = 1
+ PARAMETER C_BASEADDR = 0x40000000
+ PARAMETER C_HIGHADDR = 0x4000ffff
+ BUS_INTERFACE SOPB = mb_opb
+ PORT OPB_Clk = sys_clk_s
+ PORT GPIO_in = fpga_0_Push_Buttons_3Bit_GPIO_in
+END
+
+BEGIN opb_gpio
+ PARAMETER INSTANCE = DIP_Switches_8Bit
+ PARAMETER HW_VER = 3.01.b
+ PARAMETER C_GPIO_WIDTH = 8
+ PARAMETER C_IS_DUAL = 0
+ PARAMETER C_IS_BIDIR = 0
+ PARAMETER C_ALL_INPUTS = 1
+ PARAMETER C_BASEADDR = 0x40060000
+ PARAMETER C_HIGHADDR = 0x4006ffff
+ BUS_INTERFACE SOPB = mb_opb
+ PORT OPB_Clk = sys_clk_s
+ PORT GPIO_in = fpga_0_DIP_Switches_8Bit_GPIO_in
+END
+
+BEGIN opb_emc
+ PARAMETER INSTANCE = SRAM_256Kx32
+ PARAMETER HW_VER = 2.00.a
+ PARAMETER C_OPB_CLK_PERIOD_PS = 20000
+ PARAMETER C_NUM_BANKS_MEM = 1
+ PARAMETER C_TCEDV_PS_MEM_0 = 10000
+ PARAMETER C_TWC_PS_MEM_0 = 8000
+ PARAMETER C_TAVDV_PS_MEM_0 = 10000
+ PARAMETER C_TWP_PS_MEM_0 = 8000
+ PARAMETER C_MEM0_BASEADDR = 0x20100000
+ PARAMETER C_MEM0_HIGHADDR = 0x201fffff
+ BUS_INTERFACE SOPB = mb_opb
+ PORT OPB_Clk = sys_clk_s
+ PORT Mem_A = fpga_0_SRAM_256Kx32_Mem_A_split
+ PORT Mem_DQ = fpga_0_SRAM_256Kx32_Mem_DQ
+ PORT Mem_OEN = fpga_0_SRAM_256Kx32_Mem_OEN
+ PORT Mem_CEN = fpga_0_SRAM_256Kx32_Mem_CEN
+ PORT Mem_WEN = fpga_0_SRAM_256Kx32_Mem_WEN
+ PORT Mem_BEN = fpga_0_SRAM_256Kx32_Mem_BEN
+END
+
+BEGIN opb_intc
+ PARAMETER INSTANCE = opb_intc_0
+ PARAMETER HW_VER = 1.00.c
+ PARAMETER C_NUM_INTR_INPUTS = 5
+ PARAMETER C_BASEADDR = 0x41200000
+ PARAMETER C_HIGHADDR = 0x4120ffff
+ BUS_INTERFACE SOPB = mb_opb
+ PORT Irq = Interrupt
+ PORT Intr = opb_timer_0_Interrupt&RS232_Interrupt&opb_vga_0_IP2INTC_Irpt
+END
+
+BEGIN util_bus_split
+ PARAMETER INSTANCE = SRAM_256Kx32_util_bus_split_0
+ PARAMETER HW_VER = 1.00.a
+ PARAMETER C_SIZE_IN = 32
+ PARAMETER C_LEFT_POS = 12
+ PARAMETER C_SPLIT = 30
+ PORT Sig = fpga_0_SRAM_256Kx32_Mem_A_split
+ PORT Out1 = fpga_0_SRAM_256Kx32_Mem_A
+END
+
+BEGIN dcm_module
+ PARAMETER INSTANCE = dcm_0
+ PARAMETER HW_VER = 1.00.a
+ PARAMETER C_CLK0_BUF = TRUE
+ PARAMETER C_CLKIN_PERIOD = 20.000000
+ PARAMETER C_CLK_FEEDBACK = 1X
+ PARAMETER C_DLL_FREQUENCY_MODE = LOW
+ PARAMETER C_EXT_RESET_HIGH = 1
+ PORT CLKIN = dcm_clk_s
+ PORT CLK0 = sys_clk_s
+ PORT CLKFB = sys_clk_s
+ PORT RST = net_gnd
+ PORT LOCKED = dcm_0_lock
+END
+
+BEGIN opb_timer
+ PARAMETER INSTANCE = opb_timer_0
+ PARAMETER HW_VER = 1.00.b
+ PARAMETER C_BASEADDR = 0x41c00000
+ PARAMETER C_HIGHADDR = 0x41c0ffff
+ BUS_INTERFACE SOPB = mb_opb
+ PORT Interrupt = opb_timer_0_Interrupt
+END
+
+BEGIN opb_vga
+ PARAMETER INSTANCE = opb_vga_0
+ PARAMETER HW_VER = 1.00.a
+ PARAMETER C_BASEADDR = 0x73a00000
+ PARAMETER C_HIGHADDR = 0x73a0ffff
+ BUS_INTERFACE MSOPB = mb_opb
+ PORT HSYNC = opb_vga_0_HSYNC
+ PORT VSYNC = opb_vga_0_VSYNC
+ PORT RED = opb_vga_0_RED
+ PORT GREEN = opb_vga_0_GREEN
+ PORT BLUE = opb_vga_0_BLUE
+ PORT IP2INTC_Irpt = opb_vga_0_IP2INTC_Irpt
+END
+

@@ -1,0 +1,258 @@
+<html>
+<head>
+	<title>
+Change log for opb_emc, 2.00.a
+	</title>
+	<meta cvs_header="$Id: ip_change_log_template.html,v 1.5 2006/02/23 23:17:49 sujm Exp $">
+	<link href="../../../../../../doc/css/xilhtml.css" rel="stylesheet" type="text/css">
+	<style>
+		P.Level1Heading {
+			color: #000000;
+			font-weight: bold;
+			font-size: 1.05em;
+			margin-bottom: 0em;
+			margin-top: 0em;
+		}
+		P.Level2Heading  {
+			font-weight: bold;
+			margin-top: 2em;
+			margin-bottom: 0em;
+		}
+		P.Level3Heading {
+			font-weight: bold;
+			margin-top: 2em;
+		}
+		.GreyBackground {
+			background-color:#CCCCCC;
+		}
+		.PreformatFont  {
+			font-family: Fixed, Mono, Courier New, Courier;
+			font-size: .95em;
+		}
+	</style>
+</head>
+<body>
+	<h3 class="PageHeader">Xilinx Processor IP Library</h3>
+	<h1>
+Change log for opb_emc, 2.00.a
+	</h1>
+	<hr class="whs1">
+
+<!CORE-CHANGE-DATA>
+<!bgn-change-data-table>
+<!--@BEGIN_CHANGELOG SUMMARY CORE_NAME=opb_emc_v2_00_a STATE=ACTIVE LAST_UPDATED=8.1.1 -->
+<!--@END_CHANGELOG -->
+<table cellpadding="1" cellspacing="0" border="0"
+	style="text-align: left; vertical-align: top;"
+>
+	<tbody>
+		<!spacer><tr><td><p><br></p></td></tr>
+		<tr>
+			<td class="GreyBackground">
+				<p class="Level1Heading">
+Changes in 8.1.1, Update # 050
+				</p>
+				</a>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<p class="Level2Heading">
+8.1.1 - Changes in tool interface files (.mpd)
+				</p>
+				<hr class="whs1">
+			</td>
+		</tr>
+		<tr>
+			<td>
+<!--@BEGIN_CHANGELOG EDK_I_SP1 CORE_NAME=opb_emc_v2_00_a TYPE=mpd --><pre>
+Correct IO_IS typo of the following parameters:C_THZOE_PS_MEM_0, C_THZOE_PS_MEM_1, C_THZOE_PS_MEM_2 and C_THZOE_PS_MEM_3.
+<!--@END_CHANGELOG --></pre>
+			</td>
+		</tr>
+		<!spacer><tr><td><p><br></p></td></tr>
+		<tr>
+			<td class="GreyBackground">
+				<p class="Level1Heading">
+Changes in 8.1, Update # 040
+				</p>
+				</a>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<p class="Level2Heading">
+8.1 - Changes in tool interface files (.mpd)
+				</p>
+				<hr class="whs1">
+			</td>
+		</tr>
+		<tr>
+			<td>
+<!--@BEGIN_CHANGELOG EDK_I CORE_NAME=opb_emc_v2_00_a TYPE=mpd --><pre>
+Added individual _I, _O and _T ports for Tri-state port Mem_DQ.
+<!--@END_CHANGELOG --></pre>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<p class="Level2Heading">
+8.1 - Changes in TCL files associated with core (.tcl)
+				</p>
+				<hr class="whs1">
+			</td>
+		</tr>
+		<tr>
+			<td>
+<!--@BEGIN_CHANGELOG EDK_I CORE_NAME=opb_emc_v2_00_a TYPE=tcl --><pre>
+
+- clean up old datastructure APIs
+
+<!--@END_CHANGELOG --></pre>
+			</td>
+		</tr>
+		<!spacer><tr><td><p><br></p></td></tr>
+		<tr>
+			<td class="GreyBackground">
+				<p class="Level1Heading">
+Changes in 7.1.2, Update # 030
+				</p>
+				</a>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<p class="Level2Heading">
+7.1.2 - Changes in VHDL sources (.vhd)
+				</p>
+				<hr class="whs1">
+			</td>
+		</tr>
+		<tr>
+			<td>
+<!--@BEGIN_CHANGELOG EDK_H_SP2 CORE_NAME=opb_emc_v2_00_a TYPE=vhdl SUBTYPE=opb_emc --><pre>
+
+Fixed issue with Mem_DQ_T registers not being packed into the IOB's
+
+<!--@END_CHANGELOG --></pre>
+			</td>
+		</tr>
+		<!spacer><tr><td><p><br></p></td></tr>
+		<tr>
+			<td class="GreyBackground">
+				<p class="Level1Heading">
+Changes in 7.1.1, Update # 020
+				</p>
+				</a>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<p class="Level2Heading">
+7.1.1 - Changes in VHDL sources (.vhd)
+				</p>
+				<hr class="whs1">
+			</td>
+		</tr>
+		<tr>
+			<td>
+<!--@BEGIN_CHANGELOG EDK_H_SP1 CORE_NAME=opb_emc_v2_00_a TYPE=vhdl SUBTYPE=opb_emc --><pre>
+
+Fixed problem with ZERO_DATA constant being of the wrong width when
+C_INCLUDE_DATAWIDTH_MATCHING_0 = 0 and the memory device width was
+defined as something other than 32-bits wide.
+
+<!--@END_CHANGELOG --></pre>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<p class="Level2Heading">
+7.1.1 - Changes in tool interface files (.mpd)
+				</p>
+				<hr class="whs1">
+			</td>
+		</tr>
+		<tr>
+			<td>
+<!--@BEGIN_CHANGELOG EDK_H_SP1 CORE_NAME=opb_emc_v2_00_a TYPE=mpd --><pre>
+Added full support for spartan3e.
+<!--@END_CHANGELOG --></pre>
+			</td>
+		</tr>
+		<!spacer><tr><td><p><br></p></td></tr>
+		<tr>
+			<td class="GreyBackground">
+				<p class="Level1Heading">
+Changes in 6.3.2, Update # 010
+				</p>
+				</a>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<p class="Level2Heading">
+6.3.2 - Changes in VHDL sources (.vhd)
+				</p>
+				<hr class="whs1">
+			</td>
+		</tr>
+		<tr>
+			<td>
+<!--@BEGIN_CHANGELOG EDK_Gmm_SP2 CORE_NAME=opb_emc_v2_00_a TYPE=vhdl SUBTYPE=opb_emc --><pre>
+
+This New version, opb_emc_v2_00_a, supports OPB sequential address
+transactions with a burst response.
+
+The following Parameters have been modified:
+C_INCLUDE_BURST can now be set to 0 or 1. This version supports
+sequential address transactions in a burst-like manner. Default value
+is now 0.
+
+Fixed problem with memory state machine missing single beat cycles while
+waiting for read or write recovery.
+
+<!--@END_CHANGELOG --></pre>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<p class="Level2Heading">
+6.3.2 - Changes in tool interface files (.mpd)
+				</p>
+				<hr class="whs1">
+			</td>
+		</tr>
+		<tr>
+			<td>
+<!--@BEGIN_CHANGELOG EDK_Gmm_SP2 CORE_NAME=opb_emc_v2_00_a TYPE=mpd STATE=ACTIVE --><pre>
+Added in 6.3.2.
+<!--@END_CHANGELOG --></pre>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<p class="Level2Heading">
+6.3.2 - Changes in TCL files associated with core (.tcl)
+				</p>
+				<hr class="whs1">
+			</td>
+		</tr>
+		<tr>
+			<td>
+<!--@BEGIN_CHANGELOG EDK_Gmm_SP2 CORE_NAME=opb_emc_v2_00_a TYPE=tcl --><pre>
+
+Added tcl for 2.00.a version
+
+<!--@END_CHANGELOG --></pre>
+			</td>
+		</tr>
+	</tbody>
+</table>
+<!end-change-data-table>
+
+	<p class="Copyright">
+	Copyright &copy; 1995-2006 Xilinx, Inc. All rights reserved.
+	</p>
+</body>
+</html>

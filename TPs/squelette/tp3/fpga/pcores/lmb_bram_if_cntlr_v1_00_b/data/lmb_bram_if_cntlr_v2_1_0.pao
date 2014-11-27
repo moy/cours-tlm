@@ -1,0 +1,12 @@
+################################################################################
+##
+## Copyright (c) 1995-2002 Xilinx, Inc.  All rights reserved.
+##
+## lmb_bram_if_cntlr.pao
+##
+## Peripheral Analyze Order
+##
+################################################################################
+
+lib proc_common_v1_00_c pselect_mask
+lib lmb_bram_if_cntlr_v1_00_b lmb_bram_if_cntlr

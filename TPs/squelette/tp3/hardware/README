@@ -1,0 +1,16 @@
+Hardware Platform
+-----------------
+
+FPGA Address map:
+                                     address
+                                start       size
+Microblaze local memory      0x00000000  0x00002000   (no TLM model)
+External 1 MiB SRAM          0x20100000  0x00100000
+GPIO 3x Push Buttons         0x40000000  0x00010000
+GPIO 8x Leds                 0x40020000  0x00010000   (no TLM model)
+GPIO 4x 7 Segment Display    0x40040000  0x00010000   (no TLM model)
+GPIO 8x Dip Switches         0x40060000  0x00010000   (no TLM model)
+UART Lite                    0x40600000  0x00010000   (no TLM model)
+Interrupt Controller         0x41200000  0x00010000
+Timer                        0x41C00000  0x00010000
+VGA Controller               0x73A00000  0x00010000
