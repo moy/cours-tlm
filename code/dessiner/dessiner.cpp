@@ -33,7 +33,7 @@ int main () {
 	canvas.push_back(new Triangle());
 	canvas.push_back(new Square());
 	// canvas.push_back(new Drawable()); // not compilable
-	for (auto &d : canvas) { // C++11
+	for (auto d : canvas) { // C++11
 		d->draw();
 	}
 }

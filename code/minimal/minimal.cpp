@@ -11,42 +11,42 @@ using namespace sc_core;
 using namespace std;
 
 SC_MODULE(writer) {
-        sc_out<bool> out;
+	sc_out<bool> out;
 
-        void compute (void) {
-                bool val = false;
-                while (true) {
-                        wait(1, SC_NS);
-                        val = !val;
-                        cout << name() << ": sending " << val << endl;
-                        out.write(val);
-                }
-        }
-        SC_CTOR(writer) {
-                SC_THREAD(compute);
-        }
+	void compute (void) {
+		bool val = false;
+		while (true) {
+			wait(1, SC_NS);
+			val = !val;
+			cout << name() << ": sending " << val << endl;
+			out.write(val);
+		}
+	}
+	SC_CTOR(writer) {
+		SC_THREAD(compute);
+	}
 };
 
 SC_MODULE(receiver) {
-        sc_in<bool> in;
+	sc_in<bool> in;
 
-        void compute (void) {
-                std::cout << name() << ": received " << in.read() << endl;
-        }
+	void compute (void) {
+		std::cout << name() << ": received " << in.read() << endl;
+	}
 
-        SC_CTOR(receiver) {
-                SC_METHOD(compute);
-                sensitive << in;
-        }
+	SC_CTOR(receiver) {
+		SC_METHOD(compute);
+		sensitive << in;
+	}
 };
 
 int sc_main(int argc, char ** argv) {
-        writer w("writer");
-        receiver r("receiver");
-        sc_signal<bool> s;
+	writer w("writer");
+	receiver r("receiver");
+	sc_signal<bool> s;
 
-        w.out.bind(s);
-        r.in.bind(s);
-        sc_start(100, SC_NS);
-        return 0;
+	w.out.bind(s);
+	r.in.bind(s);
+	sc_start(100, SC_NS);
+	return 0;
 }
