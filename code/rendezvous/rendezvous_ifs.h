@@ -6,15 +6,15 @@
 template<typename T>
 class rendezvous_in_if : virtual public sc_interface
 {
-   public:
-      virtual T get() = 0;
+public:
+	virtual T get() = 0;
 };
 
 template<typename T>
 class rendezvous_out_if : virtual public sc_interface
 {
-   public:
-      virtual void put(const T & val) = 0;
+public:
+	virtual void put(const T & val) = 0;
 };
 
 #endif

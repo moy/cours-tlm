@@ -6,11 +6,11 @@
 
 SC_MODULE(Consommateur)
 {
-   sc_port<rendezvous_in_if<int> >    entree;
+	sc_port<rendezvous_in_if<int> >    entree;
 
-   SC_CTOR(Consommateur);
+	SC_CTOR(Consommateur);
 
-   void consommation();
+	void consommation();
 };
 
 #endif

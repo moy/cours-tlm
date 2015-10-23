@@ -6,11 +6,11 @@
 
 SC_MODULE(Producteur)
 {
-   sc_port<rendezvous_out_if<int> >    sortie;
+	sc_port<rendezvous_out_if<int> >    sortie;
 
-   SC_CTOR(Producteur);
+	SC_CTOR(Producteur);
 
-   void production();
+	void production();
 };
 
 #endif

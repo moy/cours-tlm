@@ -2,15 +2,15 @@
 
 Producteur::Producteur(sc_module_name name) : sc_module(name)
 {
-   SC_THREAD(production);
+	SC_THREAD(production);
 }
 
 void Producteur::production()
 {
-   for (int i=0; i<10; i++)
-   {
-      cout << "Envoi de " << i << endl;
+	for (int i=0; i<10; i++)
+	{
+		cout << "Envoi de " << i << endl;
 	
-      sortie->put(i);
-   }
+		sortie->put(i);
+	}
 }
