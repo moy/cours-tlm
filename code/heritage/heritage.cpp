@@ -13,22 +13,22 @@ using namespace std;
 class Base {
 public:
 	void normalMethod() {
-		cout << "Base.normalMethod() appelé" << endl;
+		cout << "Base.normalMethod() appelée" << endl;
 	}
 
 	virtual void virtualMethod() {
-		cout << "Base.virtualMethod() appelé" << endl;
+		cout << "Base.virtualMethod() appelée" << endl;
 	}
 };
 
 class Derived : public Base {
 public:
 	void normalMethod() {
-		cout << "Derived.normalMethod() appelé" << endl;
+		cout << "Derived.normalMethod() appelée" << endl;
 	}
 	
 	virtual void virtualMethod() {
-		cout << "Derived.virtualMethod() appelé" << endl;
+		cout << "Derived.virtualMethod() appelée" << endl;
 	}
 };
 
@@ -36,11 +36,20 @@ int main() {
 	cout << "Instanciation avec pointeurs:" << endl;
 	/*
 	 * Ceci est une affectation de pointeurs, l'objet instancié
-	 * est utilisé tel quel, et pD pointe dessus. Le type statique
-	 * de pD est « Base * », mais son type dynamique est
+	 * est utilisé tel quel, et pB pointe dessus. Le type statique
+	 * de pB est « Base * », mais son type dynamique est
 	 * « Derived * »
 	 */
-	Base *pD = new Derived();
+	Derived *pD = new Derived();
+	Base *pB = pD; /*
+			* upcast implicite : pB peut pointer sur une
+			* classe dérivée.
+			*/
+	cout << "En passant par le pointeur sur classe de base" << endl;
+	pB->normalMethod();
+	pB->virtualMethod();
+
+	cout << "En passant par le pointeur sur classe dérivée" << endl;
 	pD->normalMethod();
 	pD->virtualMethod();
 
