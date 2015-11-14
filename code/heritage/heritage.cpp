@@ -12,7 +12,7 @@ using namespace std;
 
 class Base {
 public:
-	virtual ~Base(){}
+	virtual ~Base() {}
 
 	void normalMethod() {
 		cout << "Base.normalMethod() appelée" << endl;
