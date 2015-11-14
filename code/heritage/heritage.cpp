@@ -12,6 +12,8 @@ using namespace std;
 
 class Base {
 public:
+	virtual ~Base(){}
+
 	void normalMethod() {
 		cout << "Base.normalMethod() appelée" << endl;
 	}
@@ -66,4 +68,6 @@ int main() {
 	Base b = d;
 	b.normalMethod();
 	b.virtualMethod();
+
+	delete pD;
 }
