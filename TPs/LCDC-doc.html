@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+</head>
+<body>
+<p>The LCDC is an <em>Advanced Microcontroller Bus Architecture</em> (AMBA) master-slave module which connects to the <em>Advanced High-performance Bus</em> (AHB). The LCDC is an AMBA-compliant <em>System-on-a-Chip</em> (SoC) peripheral developed, tested and licensed by the SLE department of Grenoble INP Ensimag.</p>
+<h2 id="features" class="unnumbered">Features</h2>
+<p>The LCDC provides all the necessary control signals to interface directly with a variety of monochrome LCD panels. The controller supports the following video parameters :</p>
+<ul>
+<li><p>320 x 240 pixels resolution</p></li>
+<li><p>8 bits depth (256 grayscales)</p></li>
+</ul>
+<h2 id="inputsoutputs" class="unnumbered">Inputs/Outputs</h2>
+<p>The LCDC provides the following inputs/outputs :</p>
+<ul>
+<li><p>AMBA compliant slave interface for configuration</p></li>
+<li><p>AMBA compliant master interface</p></li>
+<li><p>Display interrupt signal (<code>display_int</code>)</p></li>
+<li><p>LCD interface signals (pixel clock, control signals)<br /></p></li>
+</ul>
+<p>Figure [figBlock] shows a simplified block diagram of the LCDC.</p>
+<figure>
+<embed src="Figures/memory.pdf" /><figcaption>Video data as expected in memory</figcaption>
+</figure>
+<p>[figMemory]</p>
+<figure>
+<embed src="Figures/block.pdf" /><figcaption>Simplified block diagram of the LCDC</figcaption>
+</figure>
+<p>[figBlock]</p>
+<h2 id="operations" class="unnumbered">Operations</h2>
+<p>After reset, the LCDC is initially idle. Beginning of operation is triggered by writing into the <code>START_REG</code> register. The LCDC then performs read accesses to an external AMBA memory device holding the video buffer via its master interface. Adresses start at the value stored in the <code>ADDR_REG</code> register and increment until reaching the end of the buffer. Video data are supposed to be stored contiguously in memory, in big endian format (see figure [figMemory]). After reading the video buffer and sending appropriate signals on its LCD outputs, the controller asserts its <code>display_int</code> interrupt signal. The signal is supposed to be deasserted before next refresh (see <code>INT_REG</code> register reference).</p>
+<h2 id="registers-summary" class="unnumbered">Registers Summary</h2>
+<p><span>llllll</span></p>
+<p><span>2 cm</span></p>
+<p><strong>Address<br />offset</strong></p>
+<p>&amp; <strong>Type</strong> &amp; <strong>Width</strong> &amp; <strong>Reset value</strong> &amp; <strong>Name</strong> &amp; <strong>Description</strong><br /></p>
+<p>&amp; &amp; &amp; &amp; &amp;<br /></p>
+<p>&amp; &amp; &amp; &amp; &amp;<br /></p>
+<p>&amp; &amp; &amp; &amp; &amp;<br /></p>
+<h2 id="registers-reference" class="unnumbered">Registers Reference</h2>
+<h3 id="start-address-register-addr_reg" class="unnumbered">Start address register (<code>ADDR_REG</code>)</h3>
+<p>The start address register holds the base address of the video memory buffer as accessed on the AMBA master interface. The value should not be modified while the controller is operating.</p>
+<h3 id="start-register-start_reg" class="unnumbered">Start register (<code>START_REG</code>)</h3>
+<p>The start register is used to trigger the beginning of controller operation. Writing <code>0x00000001</code> into the register starts the LCDC.</p>
+<h3 id="interrupt-register-int_reg" class="unnumbered">Interrupt register (<code>INT_REG</code>)</h3>
+<p>The interrupt register stores a value depending on the <code>display_int</code> interrupt signal. After <code>display_int</code> is asserted, the register’s value is 0x00000001. Writing 0x00000000 into the register deasserts the interrupt, which is required after each assertion for proper operation of the controller.</p>
+</body>
+</html>

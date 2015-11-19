@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+</head>
+<body>
+<p>Placez-vous dans le répertoire <code>TPs/squelette/tp2</code>. Comme précédemment, il faudra positionner quelques variables d’environnement avec le fichier <code>setup.sh</code> adapté à votre machine, par exemple :</p>
+<pre><code>source /matieres/5MMMTSP/tlm/setup-ensimag.sh</code></pre>
+<p>avant toute compilation/exécution.</p>
+<p>Dans la suite, on considerra que les adresses (i.e. <code>ensitlm::addr_t</code>) et les données (i.e. <code>ensitlm::data_t</code>) sur <strong>32 bits</strong>.</p>
+<h2 id="style-de-codage-imposé" class="unnumbered">Style de codage imposé</h2>
+<p>Une part de la note sera donnée sur la présentation du code. On vous impose le style suivant (qui est en principe suivi sur le code fourni, si ce n’est pas le cas signalez-le comme un bug) :</p>
+<ul>
+<li><p>Indentation avec des tabulations et non des espaces</p></li>
+<li><p>Accolades ouvrantes sur la même ligne que la ligne de code qui lui correspond (par exemple, <code>if (toto) {</code> sans retour à la ligne entre <code>)</code> et <code>{</code>.</p></li>
+<li><p>Placement des espaces autour des opérateurs, parenthèses, ... en suivant le style de codage de Linux (<a href="https://www.kernel.org/doc/Documentation/CodingStyle">https://www.kernel.org/doc/Documentation/CodingStyle</a>, Chapitre 3.1).</p></li>
+<li><p>Pas de ligne long (i.e. de plus de 80 colonnes)</p></li>
+<li><p>Pas d’espace en fin de ligne.</p></li>
+</ul>
+<p>Merci de respecter ce style <em>scrupuleusement</em>. Voir aussi <a href="http://ensiwiki.ensimag.fr/index.php/Ecrire_du_code_de_qualite">http://ensiwiki.ensimag.fr/index.php/Ecrire_du_code_de_qualite</a> pour plus d’information.</p>
+<h2 id="objectif" class="unnumbered">Objectif</h2>
+<p>Dans la plate-forme créée au TP°1, on cherche à rajouter un composant contrôleur d’écran plat (LCD Controller ou LCDC). On souhaite ensuite le tester pour s’assurer de son bon fonctionnement. La documentation du composant LDCD est disponible dans le fichier <code>LCDC-doc.pdf</code>.</p>
+<h2 id="question-1-instanciation-du-contrôleur-lcd" class="unnumbered">Question 1 : instanciation du contrôleur LCD</h2>
+<ul>
+<li><p>Les fichiers correspondant au contrôleur LCD et à la ROM (que nous utiliserons plus tard) sont dans votre archive Git, dans le répertoire <code>squelette/tp2/</code>. Vous retrouverez le bus, identique à celui du TP1, et le composant <code>Memory</code>, similaire à celui que vous avez écrit vous-mêmes pour le TP1, plus d’autres nouveaux composants.</p></li>
+<li><p>Vous pouvez recopier <code>sc_main()</code> et le composant générateur que vous avez écrit pour le TP1 comme base de travail. Effacer les commandes de test de la mémoire écrites au TP n°1 dans le générateur de transaction (la méthode associée au <code>SC_THREAD</code> doit être vide).</p></li>
+<li><p>Instancier le module LCDC et le connecter au reste de la plate-forme (il faudra ajouter un port d’interruption au générateur, nous l’utiliserons plus tard). Le constructeur du contrôleur prend un paramètre additionnel de type <code>sc_time</code> permettant de fixer la fréquence de rafraichissement de l’écran LCD. Passer comme paramètre : <code>sc_time(1.0 / 25, SC_SEC)</code> (rafraichissement 25 fois par seconde).</p></li>
+<li><p>Compiler et tester.</p></li>
+</ul>
+<h2 id="question-2-dimensionnement-des-plages-dadresses" class="unnumbered">Question 2 : dimensionnement des plages d’adresses</h2>
+<p>L’affichage d’une image sur l’écran LCD par le contrôleur nécessite un espace mémoire dédié pour stocker cette image, appelé <em>mémoire vidéo</em> ou <em>video memory</em>. Nous allons utiliser la mémoire déjà présente dans la plate-forme pour cet espace.</p>
+<p>La mémoire est dimensionnée comme suit :</p>
+<ul>
+<li><p>10 Kio sont réservés pour les données du logiciel embarqué (cette partie sera inutilisée dans notre plate-forme qui ne modélise pas le logiciel embarqué fidèlement).</p></li>
+<li><p>La mémoire vidéo utilise un codage d’1 octet par pixel, donc sa taille sera <span class="math">320 * 240 = 76800</span>.</p></li>
+</ul>
+<p>La taille nécessaire pour la mémoire est donc 87040 = 0x15400. Modifiez la taille de la mémoire et la plage d’adresse correspondante (<code>bus.map()</code>) dans <code>sc_main()</code>.</p>
+<p>Le LCDC n’expose qu’un (petit) banc de registres. Calculez la taille nécessaire d’après la documentation, et adaptez la plage d’adresse.</p>
+<h2 id="question-3-modélisation-du-registre-start_reg-du-lcdc" class="unnumbered">Question 3 : modélisation du registre <code>START_REG</code> du LCDC</h2>
+<p>Dans la version récupérée du contrôleur LCD, il manque l’implémentation du registre <code>START_REG</code> (voir documentation).</p>
+<ul>
+<li><p>Dans le fichier <code>LCDC.cpp</code>, implémenter le registre. Que faut-il faire? Utiliser les constantes définies dans le fichier <code>LCDC_registermap.h</code>.</p></li>
+<li><p>Compiler et tester.</p></li>
+</ul>
+<h2 id="question-4-premiers-tests-du-lcdc" class="unnumbered">Question 4 : premiers tests du LCDC</h2>
+<ul>
+<li><p>Définir dans le générateur des constantes pour les différentes adresses que l’on manipulera par la suite : adresse de base de la mémoire, adresse de base de la partie mémoire vidéo, adresse de base du contrôleur LCD (utiliser des directives <code>#define</code>, ou <code>const ensitlm::addr_t ... = ...;</code>).</p></li>
+<li><p>Dans le générateur, réaliser des écritures dans la mémoire vidéo de façon à afficher une image blanche (c’est à dire, donc la mémoire vidéo est une suite de <code>0xFFFFFFFF</code>), avec une boucle simple du type</p>
+<pre><code>for (int i = 0; i &lt; IMG_SIZE; i++) {
+        ...;
+}</code></pre></li>
+<li><p>Compiler et tester.</p></li>
+<li><p>Réaliser les écritures appropriées dans les registres du LCDC pour observer effectivement l’image à l’écran (penser à utiliser les constantes définies dans le fichier <code>LCDC_registermap.h</code>).</p></li>
+<li><p>Compiler et tester.</p></li>
+</ul>
+<h2 id="question-5-ajout-dun-composant-rom" class="unnumbered">Question 5 : Ajout d’un composant ROM</h2>
+<p>Nous allons maintenant afficher une image sur l’écran. L’image est stockée dans un composant ROM, dans un format très légèrement différent de celui utilisé par le contrôleur LCD : l’image est stockée avec 4 bits par pixels, en niveau de gris. Le LCDC utilisant 8 bits par pixels, on considère que les 4 bits stockés dans la ROM correspondent aux bits de poids fort des 8 bits de la mémoire vidéo. Les pixels de 4 bits sont stockés les uns à la suite des autres, en format big-endian :</p>
+<ul>
+<li><p>Instancier le composant ROM, le connecter au bus dans <code>sc_main.cpp</code>.</p></li>
+<li><p>Ajouter une plage d’adresse, sachant que l’image fait 38400 octets, et est stockée au début de la ROM.</p></li>
+<li><p>Reprendre la boucle d’initialisation de la mémoire à <code>0xFFFFFFFF</code>, et remplacer le corps de la boucle par une fonction qui lit un groupe de pixels (un mot de 32 bits) depuis la ROM, et écrit les deux groupes de pixels correspondants dans la mémoire vidéo. Les opérateurs de décalages de bits (<code>&lt;&lt;</code> et <code>&gt;&gt;</code>) et les masques de bits (<code>x &amp; 0x00F00000</code>) devraient vous aider. Cette partie est réalisable en une dizaine de lignes de code.</p></li>
+</ul>
+<h2 id="question-6-traitement-des-interruptions" class="unnumbered">Question 6 : traitement des interruptions</h2>
+<p>L’objectif de cette question est de traiter les interruptions du LCDC, de façon à pouvoir réaliser des animations à l’écran. Cela suppose de pouvoir écrire les données en mémoire vidéo au <span>« bon moment »</span>, c’est à dire entre deux interruptions.</p>
+<ul>
+<li><p>Rajouter un port d’entrée d’interruption « <code>irq</code> » au générateur et le connecter au signal d’interruption issue du LCDC. Attention, le signal d’interruption va être piloté par deux composants (<code>LCDC</code>, et indirectement le générateur de trafic dans son traitement de l’interruption), donc il faudra instancier le signal correspondant comme ceci :</p>
+<pre><code>sc_signal&lt;bool, SC_MANY_WRITERS&gt; irq_signal(&quot;IRQ&quot;);
+  </code></pre></li>
+<li><p>À la suite du code déjà écrit dans le <code>SC_THREAD</code> du générateur, rajouter une attente sur l’interruption. Vous procéderez en déclarant une <code>SC_METHOD</code> qui notifiera un événement débloquant le <code>SC_THREAD</code> principal. Afficher après cette attente un message indiquant la prise en compte de l’interruption.</p></li>
+<li><p>Compiler et tester. Comment avez-vous fait ?</p></li>
+<li><p>Modifier le code du générateur de façon à avoir une boucle infinie d’attente d’interruptions. Dans cette boucle, rajouter après chaque attente les écritures permettant de générer une image différente à l’écran. On propose de décaler à chaque pas de la boucle l’image de un pixel vers le bas (en déplaçant la partie de l’image tronquée du bas sur le haut de l’image). On peut aussi afficher un fondu vers le noir ou vers le blanc, mais attention aux manipulations de bits un peu fines !</p></li>
+</ul>
+</body>
+</html>
