@@ -6,8 +6,8 @@
 #include <stdint.h>
 
 namespace ensitlm {
-   typedef uint32_t addr_t;
-   typedef uint32_t data_t;
+typedef uint32_t addr_t;
+typedef uint32_t data_t;
 }
 
 #include "initiator_socket.h"
