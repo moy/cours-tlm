@@ -27,6 +27,13 @@ make</code></pre>
 <p>On cherche à créer la plate-forme (modélisation de système sur puce) représentée figure [figPlateforme]. Le composant <code>Memory</code> doit modéliser le comportement d’une mémoire réelle. La mémoire est une mémoire 32 bits, on ne peut accéder qu’aux mots entiers (pas de byte-enable). Les adresses circulant sur le bus sont cependant en octets. Les accès mémoires non-alignés sont interdits (lèvent une erreur au niveau du bus). Le composant <code>Generator1</code> servant à générer des tests permettant de valider le fonctionnement de la mémoire (il s’appelle comme ceci parce qu’il ne fait rien de bien intelligent, mais qu’il <em>génère</em> du trafic).</p>
 <p>Il est conseillé de compiler son code et de le tester régulièrement, et pas seulement quand cela est explicitement demandé dans l’énoncé, de façon à écluser au fur et à mesure les erreurs de syntaxe éventuelles.</p>
 <p>Il est tout à fait possible (et même recommandé !) d’utiliser <code>git commit</code> pour sauvegarder périodiquement votre travail. Les prochains <code>git pull</code> récupéreront la dernière version du cours et la fusionnera avec votre travail. Vous pouvez même travailler à plusieurs avec ce dépôt Git (des explications sont disponibles sur EnsiWiki).</p>
+<h2 id="préliminaire" class="unnumbered">Préliminaire</h2>
+<p>Pour vous aider, deux exemples de code sont fournis dans le répertoire <code>code/</code> :</p>
+<ul>
+<li><p><code>ensitlm-mini</code> : exemple minimaliste de connexion d’un initiateur à une cible via un bus, en un seul fichier (pas très propre, mais pratique pour avoir une vue d’ensemble).</p></li>
+<li><p><code>ensitlm-mini-multi</code> : le même exemple, avec un découpage 1 classe = 1 fichier <code>.h</code> + 1 fichier <code>.cpp</code>.</p></li>
+</ul>
+<p>Compiler et exécuter ces programmes. Parcourez rapidement le code : vous pourrez vous en inspirer pour la suite du TP.</p>
 <h2 id="question-1-création-du-générateur-de-transactions" class="unnumbered">Question 1 : création du générateur de transactions</h2>
 <ul>
 <li><p>Créer un module SystemC <code>Generator</code>, comportant un socket initiateur ENSITLM « <code>initiator</code> » et un processus de type <code>SC_THREAD</code>.</p></li>
