@@ -1,0 +1,34 @@
+################################################################################
+##
+## Copyright (c) 1995-2002 Xilinx, Inc.  All rights reserved.
+##
+## Xilinx, Inc.
+##
+## opb_intc.pao
+##
+## Peripheral Analyze Order
+##
+################################################################################
+
+lib proc_common_v1_00_a common_types_pkg
+lib proc_common_v1_00_a proc_common_pkg
+lib proc_common_v1_00_a or_muxcy
+lib proc_common_v1_00_a or_gate
+lib proc_common_v1_00_a pselect
+lib intc_core_v1_00_c intc_pkg
+lib intc_core_v1_00_c mer_reg
+lib intc_core_v1_00_c bus_mux_le
+lib intc_core_v1_00_c kind_of_edge
+lib intc_core_v1_00_c edge_det_bit
+lib intc_core_v1_00_c lvl_det_bit
+lib intc_core_v1_00_c detect_intr
+lib intc_core_v1_00_c ier_logic
+lib intc_core_v1_00_c opt_regs
+lib intc_core_v1_00_c wr_reg_decode
+lib intc_core_v1_00_c pulse_gen
+lib intc_core_v1_00_c int_det
+lib intc_core_v1_00_c regs
+lib intc_core_v1_00_c irq_gen
+lib intc_core_v1_00_c intc_core
+lib opb_intc_v1_00_c opb_intfc
+lib opb_intc_v1_00_c opb_intc

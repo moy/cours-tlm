@@ -1,0 +1,17 @@
+################################################################################
+##
+## Copyright (c) 1995-2002 Xilinx, Inc.  All rights reserved.
+##
+## opb_uartlite.pao
+##
+## Peripheral Analyze Order
+##
+################################################################################
+
+lib common_v1_00_a       pselect
+lib opb_uartlite_v1_00_b baudrate
+lib opb_uartlite_v1_00_b srl_fifo
+lib opb_uartlite_v1_00_b opb_uartlite_rx
+lib opb_uartlite_v1_00_b opb_uartlite_tx
+lib opb_uartlite_v1_00_b opb_uartlite_core
+lib opb_uartlite_v1_00_b opb_uartlite

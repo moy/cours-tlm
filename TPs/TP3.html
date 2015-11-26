@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+</head>
+<body>
+<h2 id="style-de-codage-imposé" class="unnumbered">Style de codage imposé</h2>
+<p>Comme pour le TP2, une part de la note sera donnée sur la présentation du code. On vous impose le style suivant (qui est en principe suivi sur le code fourni, si ce n’est pas le cas signalez-le comme un bug) :</p>
+<ul>
+<li><p>Indentation avec des tabulations et non des espaces</p></li>
+<li><p>Accolades ouvrantes sur la même ligne que la ligne de code qui lui correspond (par exemple, <code>if (toto) {</code> sans retour à la ligne entre <code>)</code> et <code>{</code>.</p></li>
+<li><p>Placement des espaces autour des opérateurs, parenthèses, ... en suivant le style de codage de Linux (<a href="https://www.kernel.org/doc/Documentation/CodingStyle">https://www.kernel.org/doc/Documentation/CodingStyle</a>, Chapitre 3.1).</p></li>
+<li><p>Pas de ligne long (i.e. de plus de 80 colonnes)</p></li>
+<li><p>Pas d’espace en fin de ligne.</p></li>
+</ul>
+<p>Merci de respecter ce style <em>scrupuleusement</em>. Voir aussi <a href="http://ensiwiki.ensimag.fr/index.php/Ecrire_du_code_de_qualite">http://ensiwiki.ensimag.fr/index.php/Ecrire_du_code_de_qualite</a> pour plus d’information.</p>
+<p>Une part de la note sera également accordée à la propreté du rendu : rendez tout ce qui est nécessaire à votre TP et seulement cela. Ne rendez pas de fichiers inutiles (par exemple, ne rendez pas les fichiers binaires ni les fichiers de sauvegardes de votre éditeur de texte). Faites également le ménage dans votre code (supprimez les commentaires « pense-bêtes » par exemple.</p>
+<h1 id="objectif">Objectif</h1>
+<p>Ce TP s’intéresse à l’intégration du logiciel embarqué. La plate-forme à modéliser a été développée sur FPGA (cf <code>TP3-fpga.pdf</code> pour un descriptif du système). C’est un petit système sur puce, avec le strict minimum pour faire tourner du logiciel non-trivial avec affichage graphique (mais pas d’accélérateur matériel ou de bloc IP exotique). Le logiciel embarqué proposé est le jeu de la vie (cf. <a href="http://en.wikipedia.org/wiki/Conway%27s_Game_of_Life">http://en.wikipedia.org/wiki/Conway%27s_Game_of_Life</a> pour les règles du jeu et des exemples rigolos).</p>
+<p>Nous allons expérimenter deux approches en simulation :</p>
+<dl>
+<dt>La simulation native:</dt>
+<dd><p>le logiciel embarqué sera compilé avec le même compilateur que la plate-forme, et liée comme un morceau de code en C quelconque. Les accès mémoires pertinents du point du vue des composants matériels seront routés sur le bus TLM. Le code embarqué est encapsulé dans un composant TLM appelé « wrapper natif ».</p>
+</dd>
+<dt>La simulation via ISS:</dt>
+<dd><p>L’ISS, ou Instruction Set Simulator, va interpréter directement le code compilé pour le processeur cible (un Microblaze dans notre cas). On utilisera donc la même chaîne de compilation que pour l’intégration du logiciel sur la puce finale (en théorie, le même binaire, au bit près, peut tourner sur ISS et sur la puce). Toutes les lectures/écritures faites par l’ISS seront routées sur le bus.</p>
+</dd>
+</dl>
+<p>Il n’est pas garanti qu’un logiciel développé sur ISS continuera à tourner en simulation native. Par contre, un logiciel bien écrit et qui marche en simulation native devrait marcher sans modification sur la puce ou en simulation avec ISS (après recompilation bien entendu).</p>
+<p>Dans les deux cas, la plateforme sera « loosely timed », c’est à dire que nous nous servons du temps pour faire une simulation raisonnable (par exemple, les timers sont timés correctement, l’ISS est modélisé avec une période qui correspond à la version FGPA), mais nous ne cherchons pas la précision. Par exemple, en simulation native, nous ignorons totalement la notion de temps pour l’exécution du logiciel, le modèle de bus que nous utilisons n’est pas timé, ...</p>
+<h1 id="la-plateforme">La plateforme</h1>
+<p>La plateforme modélisée est celle présentée dans le document <span>TP3-fpga.pdf</span>. Les détails non-pertinents au niveau TLM sont abstraits. Ici, la principale différence est que la plateforme TLM n’a qu’un bus, alors que la version FPGA a deux bus distincts pour les instructions et les données. Le contrôleur d’interruption a été simplifié également : l’interface cible sur le bus n’est pas modélisée car pas utilisée par notre logiciel embarqué. La plate-forme obtenue est décrite dans la figure [fig:graph-tlm].</p>
+<p><span> <span> (8,3.5) node[module,minimum width=15cm,minimum height=1cm] (Bus) <span>Bus</span>; </span> </span>;</p>
+<p><span> <span> (2,6) node[module,minimum width=3cm, minimum height=2cm] (CPU) <span>CPU</span>; </span> </span>; ; <span> (cpu<sub>s</sub>ocket) – (cpu<sub>s</sub>ocket |- Bus.north); </span>; ;</p>
+<p><span> <span> (6,6) node[module,minimum width=3cm, minimum height=2cm] (ITC) <span>ITC</span>; </span> </span>; ; ; ;</p>
+<p>(itc) – (cpu<sub>i</sub>rq);</p>
+<p><span> <span> (4,1) node[module,minimum width=3cm, minimum height=2cm] (data<sub>R</sub>AM) <span>Data RAM</span>; </span> </span>; ; <span> (ram<sub>s</sub>ocket) – (ram<sub>s</sub>ocket |- Bus.south); </span>;</p>
+<p><span> <span> (8,1) node[module,minimum width=3cm, minimum height=2cm] (inst<sub>R</sub>AM) <span>Instruction RAM</span>; </span> </span>; ; <span> (inst<sub>r</sub>am<sub>s</sub>ocket) – (inst<sub>r</sub>am<sub>s</sub>ocket |- Bus.south); </span>;</p>
+<p><span> <span> (12,1) node[module,minimum width=3cm, minimum height=2cm] (GPIO) <span>GPIO</span>; </span> </span>; ; <span> (gpio<sub>s</sub>ocket) – (gpio<sub>s</sub>ocket |- Bus.south); </span>;</p>
+<p><span> <span> (10,6) node[module,minimum width=3cm, minimum height=2cm] (VGA) <span>VGA</span>; </span> </span>; ; ; <span> (vga<sub>t</sub>arget) – (vga<sub>t</sub>arget |- Bus.north); </span>; <span> (vga<sub>i</sub>nitiator) – (vga<sub>i</sub>nitiator |- Bus.north); </span>; ;</p>
+<p><span> (vga<sub>i</sub>rq) coordinate (tmpA); (vga<sub>i</sub>rq -| itc<sub>i</sub>n1) coordinate (tmpB); (vga<sub>i</sub>rq |- itc<sub>i</sub>n1) coordinate (tmpC); (itc<sub>i</sub>n1) coordinate (tmpD); (vga<sub>i</sub>rq) – (barycentric cs:tmpA=0.5,tmpB=0.5) – (barycentric cs:tmpD=0.5,tmpC=0.5) – (itc<sub>i</sub>n1); </span>;</p>
+<p><span> <span> (14,6) node[module,minimum width=3cm, minimum height=2cm] (timer) <span>Timer</span>; </span> </span>; ; <span> (timer<sub>s</sub>ocket) – (timer<sub>s</sub>ocket |- Bus.north); </span>; ;</p>
+<p>(VGA.north) +(0,.5) coordinate (abovevga); (abovevga -| VGA.west) coordinate (abovevgaw); (abovevga -| VGA.east) coordinate (abovevgae);</p>
+<p><span> (timer<sub>i</sub>rq) coordinate (tmpA); (timer<sub>i</sub>rq -| abovevgae) coordinate (tmpB); (timer<sub>i</sub>rq |- abovevgae) coordinate (tmpC); (abovevgae) coordinate (tmpD); (timer<sub>i</sub>rq) – (barycentric cs:tmpA=0.5,tmpB=0.5) – (barycentric cs:tmpD=0.5,tmpC=0.5) – (abovevgae); </span>; (abovevgae) – (abovevgaw); <span> (abovevgaw) coordinate (tmpA); (abovevgaw -| itc<sub>i</sub>n0) coordinate (tmpB); (abovevgaw |- itc<sub>i</sub>n0) coordinate (tmpC); (itc<sub>i</sub>n0) coordinate (tmpD); (abovevgaw) – (barycentric cs:tmpA=0.5,tmpB=0.5) – (barycentric cs:tmpD=0.5,tmpC=0.5) – (itc<sub>i</sub>n0); </span>;</p>
+<p>[fig:graph-tlm]</p>
+<p>Dans la version avec wrapper natif, on ne modélise pas du tout la mémoire programme.</p>
+<h1 id="point-de-départ">Point de départ</h1>
+<p>Pour ce TP, on ne réutilisera pas les composants des TPs précédents. Récupérer le squelette de plate-forme dans <code>TPs/squelette/tp3</code> dans votre archive Git.</p>
+<p>Le répertoire est organisé en plusieurs sous-répertoires:</p>
+<dl>
+<dt>fpga/</dt>
+<dd><p>la « vraie » plateforme, prévue pour tourner sur FPGA Xilinx, connecté à un écran VGA.</p>
+</dd>
+<dt>hardware/</dt>
+<dd><p>les composants HW de la plateforme.</p>
+</dd>
+<dt>native-wrapper/</dt>
+<dd><p>le toplevel (i.e. le fichier <code>sc_main_XXX.cpp</code> contenant la fonction <code>sc_main</code>) et les composants spécifiques au wrapper natif.</p>
+</dd>
+<dt>iss/</dt>
+<dd><p>toplevel et composants spécifiques à l’ISS microblaze.</p>
+</dd>
+<dt>elf-loader/</dt>
+<dd><p>le chargeur de fichier elf et ses dépendances. Utilisé par Memory.cpp pour charger le logiciel embarqué au format ELF lorsqu’on fait une simulation avec ISS.</p>
+</dd>
+<dt>software/</dt>
+<dd><p>Le logiciel embarqué. Pour nous, il sera très simple : c’est une implémentation du jeu de la vie, qui tient en un seul fichier (<code>main.c</code>).</p>
+</dd>
+<dt>software/cross/</dt>
+<dd><p>le nécessaire pour la compilation croisée (cross-compilation) du logiciel embarqué.</p>
+</dd>
+<dt>software/native/</dt>
+<dd><p>le nécessaire pour la compilation en wrapper natif.</p>
+</dd>
+</dl>
+<p>Pour commencer, on peut essayer :</p>
+<pre><code>cd iss/
+make -k
+cd ../native-wrapper
+make -k</code></pre>
+<p>(l’option <code>-k</code> de <code>make</code> permet de ne pas arrêter la compilation à la première erreur rencontrée)</p>
+<p>Le premier <code>make</code> va échouer sur la compilation du logiciel embarqué (votre première tâche sera de compléter le Makefile en question), mais construit tout de même l’exécutable <code>run.x</code> pour la plateforme. Le second va échouer pour la même raison (et l’édition de lien ayant besoin du logiciel embarqué, on ne peut même pas construire <code>run.x</code>). Une fois le TP terminé, les mêmes commandes créeront <code>iss/run.x</code> et <code>native-wrapper/run.x</code>, correspondant aux deux versions de la plate-forme.</p>
+<p>La suite du TP sera donc de reconstituer les différents points qui manquent pour la compilation et l’exécution de ces deux plate-formes.</p>
+<h1 id="compilation-croisée-du-logiciel-embarqué">Compilation croisée du logiciel embarqué</h1>
+<pre><code>cd software/cross/
+ls
+make</code></pre>
+<p>Pour l’instant, le <code>Makefile</code> fourni n’est pas complet: il manque les règles pour compiler, assembler et lier le logiciel embarqué (qui sera le fichier <code>a.out</code>). On compilera le logiciel avec un compilateur C, des macros sont fournies en tête du <code>Makefile</code> pour les noms des commandes. Pour l’édition de liens, on utilise un « linker script », qui donne à l’éditeur de liens les adresses finales des différentes sections et de certains symboles. Le script est dans le fichier <code>software/cross/ldscript</code>, et l’option <code>-T</code> de <code>ld</code> sera nécessaire. Une fois ces règles implémentées dans le <code>Makefile</code>, les règles <code>make dump.txt</code> et <code>make sections.txt</code> fournissent un résumé « lisible » du fichier compilé.</p>
+<h1 id="simulation-avec-iss">Simulation avec ISS</h1>
+<pre><code>cd ../../
+cd iss
+make
+./run.x</code></pre>
+<p>La plateforme devrait maintenant compiler et être capable de charger le logiciel embarqué. Parmi les choses qui ont été faites pour vous :</p>
+<ul>
+<li><p>Le composant <code>Memory</code> expose directement son tableau de stockage (champ <code>storage</code>). En fait, comme pour la plateforme physique, il y a deux composants RAM. La première se trouve à l’adresse 0 et contient la mémoire programme, et la seconde contient les données (y compris la mémoire vidéo).</p></li>
+<li><p>La fonction <code>sc_main()</code> charge directement le logiciel embarqué dans ce tableau, en utilisant le chargeur ELF.</p></li>
+<li><p>Un ISS microblaze fait partie de la plateforme, il est écrit en C++ (sans SystemC, ni TLM)</p></li>
+<li><p>Un wrapper pour cet ISS (un composant SystemC, avec interface ENSITLM in un port <code>sc_in</code> pour les IRQ, qui fait appel aux méthodes C++ de l’ISS) est partiellement implémenté.</p></li>
+</ul>
+<p>Il manque cependant plusieurs choses, que nous allons implémenter dans les sections suivantes.</p>
+<h2 id="gestion-de-la-mémoire">Gestion de la mémoire</h2>
+<ul>
+<li><p>La couche d’abstraction (<code>software/cross/hal.h</code>) n’est pas implémentée. Tous les accès mémoires via cette API stopperont la simulation brutalement sur un <code>abort()</code> (dans un premier temps, vous pouvez ignorer la fonction <code>printf()</code>).</p></li>
+<li><p>L’ISS est totalement implémenté, mais le wrapper pour l’ISS ne l’est pas. Lorsque l’ISS demande une lecture ou une écriture, c’est au wrapper de faire l’accès effectif au bus. Il y a 3 types d’accès à implémenter : le fetch, les « load » et les « store ». Ils sont identifiés comme tels dans <code>mb_wrapper.cpp</code>. Attention, l’ISS gère en interne les données en big endian, et la plateforme d’exécution est une machine Intel en little-endian, donc le reste de la plateforme s’attend à recevoir des entiers en little-endian. Les macros <code>uint32_machine_to_be</code> et <code>uint32_be_to_machine</code> peuvent aider.</p></li>
+<li><p>La pile est positionnée, mais pas à une adresse raisonnable. Il faut positionner correctement la valeur de <code>_stack_top</code> dans <code>software/cross/ldscript</code>.</p></li>
+</ul>
+<h2 id="affichage-avec-printf">Affichage avec <code>printf</code></h2>
+<p>Notre plate-forme a une capacité de debug limitée (on peut activer des traces via des macros au début des fichiers <code>mb_wrapper.cpp</code> et <code>microblaze.cpp</code>, mais elles sont en général soit trop soit pas assez verbeuses ...). Pour travailler plus confortablement, il est souhaitable de pouvoir utiliser la fonction <code>printf</code> pour afficher du texte sur la sortie standard du programme SystemC. Ce n’est pas aussi simple qu’on aurait pu le croire, vu que le code exécutable est interprété par l’ISS, on ne peut pas appeler directement la fonction <code>printf</code> de notre libc depuis le code embarqué. La solution retenue est d’avoir un composant <code>UART</code>, qui va recevoir des caractères depuis le bus Ensitlm, et les afficher via <code>cout</code> en C++ (le composant physique aurait envoyé les caractères sur un lien série). Le composant UART vous est fourni, il vous reste :</p>
+<ul>
+<li><p>À instancier et connecter correctement le composant au bus dans <code>sc_main</code>.</p></li>
+<li><p>À écrire le corps de la fonction <code>printf</code> dans <code>hal.h</code>. On ne s’intéresse qu’au cas de <code>printf</code> à un seul argument, et sans caractères spéciaux (i.e. on affiche la chaîne passée en argument sans traitement particulier). Il suffit d’afficher les caractères un par un jusqu’au caractère <code>\0</code>.</p></li>
+<li><p>L’exécution de la fonction ci-dessus va probablement faire un accès en lecture sur un seul caractère sur le bus (<code>READ_BYTE</code> dans <code>mb_wrapper.cpp</code>). Vous allez devoir implémenter ce cas (ou éventuellement trouver une implémentation de <code>printf</code> qui ne l’utilise pas) pour que <code>printf</code> marche correctement. Par exemple, pour lire un caractère à l’adresse 5, il faut faire un accès à l’adresse 4 (i.e. le multiple de 4 immédiatement inférieur), qui va donner 4 octets, puis extraire l’octet numéro 1 (via un décalage et un masque de bit par exemple).</p></li>
+</ul>
+<p>Vérifier que les instructions <code>printf</code> présente dans <code>main.c</code> sont bien prises en compte (l’exécution peut être lente, mais un message doit être affiché au début de la fonction <code>main</code>).</p>
+<h2 id="gestion-des-interruptions">Gestion des interruptions</h2>
+<p>La gestion des interruptions est totalement absente du wrapper. Il faudra implémenter un processus SystemC sensible aux fronts sur le port <code>irq</code>, et qui utilise la fonction <code>m_iss.setIrq(true)</code> pour signaler à l’ISS qu’une interruption a été reçue. Une fois l’interruption traitée par l’ISS, il faut appeler <code>m_iss.setIrq(false)</code>. Pour que l’ISS ait vu l’interruption, il faut que la fonction <code>m_iss.step()</code> ait été appelée plusieurs (par exemple, 5) fois. Il faudra donc ajouter un compteur qui remet l’interruption à faux après 5 cycles.</p>
+<h1 id="compilation-pour-simulation-native">Compilation pour simulation native</h1>
+<pre><code>cd ../
+cd software/native/
+cat hal.h
+make</code></pre>
+<p>Peu de choses à faire dans ce répertoire : il manque simplement la règle pour compiler le logiciel embarqué en mode natif. On compilera avec un compilateur C (<code>gcc</code>) et non C++ (<code>g++</code>).</p>
+<p>Le fichier <code>hal.h</code> est complet, mais il se contente de rediriger les appels sur des fonctions qui seront implémentées dans le wrapper natif (<code>native-wrapper/native_wrapper.cpp</code>).</p>
+<h1 id="execution-en-simulation-native">Execution en simulation native</h1>
+<pre><code>cd ../../
+cd native-wrapper/
+make</code></pre>
+<p>Pour la simulation native, il reste à implémenter le wrapper natif. Il se trouve dans le fichier <code>native_wrapper.cpp</code>. Le squelette est fourni, mais le corps de la plupart des fonctions n’est pas implémenté.</p>
+<ul>
+<li><p>Les fonctions <code>read_mem</code>, <code>write_mem</code>, <code>cpu_relax</code> et <code>wait_for_irq</code> doivent rediriger sur les méthodes correspondantes de <code>NativeWrapper</code>.</p></li>
+<li><p>Les méthodes de <code>NativeWrapper</code> doivent être implémentées.</p></li>
+</ul>
+<p>Par ailleurs, en exécution native, on peut avoir des problèmes liés au fait que par défaut, SystemC ne laisse pas le temps s’écouler. Une boucle d’attente active (polling) dans le logiciel embarqué va donc figer la simulation (et il y en a une dans <code>main.c</code> !). L’astuce classique consiste à « casser » les boucles d’attente avec un appel à <code>cpu_relax()</code>, qui laisse le temps s’écouler<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>.</p>
+<h1 id="comparaison-de-performances">Comparaison de performances</h1>
+<p>Comparer les performances obtenues avec l’ISS et avec le wrapper natif.</p>
+<h1 id="origine-des-composants">Origine des composants</h1>
+<p>Certains composants viennent du projet SocLib (<a href="https://www.soclib.fr/">https://www.soclib.fr/</a>) :</p>
+<ul>
+<li><p>Le chargeur ELF (<code>elf-loader/</code>),</p></li>
+<li><p>L’ISS MicroBlaze (<code>microblaze.*</code>, <code>arithmetics.h</code>, <code>iss.h</code>, <code>register.h</code>),</p></li>
+<li><p>Le fichier <code>soclib_endian.h</code>.</p></li>
+</ul>
+<p>La chaîne de compilation microblaze (gcc, ld, ...) est celle de Xilinx (<a href="http://xilinx.wikidot.com/mb-gnu-tools">http://xilinx.wikidot.com/mb-gnu-tools</a>).</p>
+<section class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>sur la plupart des plate-formes, cette fonction <code>cpu_relax()</code> aurait des choses intéressantes à faire en dehors du contexte de la simulation native, comme diminuer la priorité du processus courant, vider des caches, ... mais ce n’est pas le cas sur notre microblaze sans OS, sans cache, ...<a href="#fnref1">↩</a></p></li>
+</ol>
+</section>
+</body>
+</html>

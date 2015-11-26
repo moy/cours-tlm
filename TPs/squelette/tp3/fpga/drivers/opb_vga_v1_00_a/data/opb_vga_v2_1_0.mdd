@@ -1,0 +1,23 @@
+##############################################################################
+## Filename:          /home/ensiens.imag.fr/moy/sle-tlm/TPs/squelette/tp3/fpga/drivers/opb_vga_v1_00_a/data/opb_vga_v2_1_0.mdd
+## Description:       Microprocessor Driver Definition
+## Date:              Fri Sep 18 14:42:55 2009 (by Create and Import Peripheral Wizard)
+##############################################################################
+
+OPTION psf_version = 2.1.0;
+
+BEGIN DRIVER opb_vga
+
+  OPTION supported_peripherals = (opb_vga);
+  OPTION depends = (common_v1_00_a);
+  OPTION copyfiles = all;
+
+  BEGIN ARRAY interrupt_handler
+    PROPERTY desc = "Interrupt Handler Information";
+    PROPERTY size = 1, permit = none;
+    PARAM name = int_handler, default = XNullHandler, desc = "Name of Interrupt Handler", type = string;
+    PARAM name = int_port, default = IP2INTC_Irpt, desc = "Interrupt pin associated with the interrupt handler", permit = none;
+
+  END ARRAY
+
+END DRIVER

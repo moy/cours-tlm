@@ -1,0 +1,307 @@
+<html>
+<head>
+	<title>
+Change log for microblaze, 4.00.a
+	</title>
+	<meta cvs_header="$Id: ip_change_log_template.html,v 1.5 2006/02/23 23:17:49 sujm Exp $">
+	<link href="../../../../../../doc/css/xilhtml.css" rel="stylesheet" type="text/css">
+	<style>
+		P.Level1Heading {
+			color: #000000;
+			font-weight: bold;
+			font-size: 1.05em;
+			margin-bottom: 0em;
+			margin-top: 0em;
+		}
+		P.Level2Heading  {
+			font-weight: bold;
+			margin-top: 2em;
+			margin-bottom: 0em;
+		}
+		P.Level3Heading {
+			font-weight: bold;
+			margin-top: 2em;
+		}
+		.GreyBackground {
+			background-color:#CCCCCC;
+		}
+		.PreformatFont  {
+			font-family: Fixed, Mono, Courier New, Courier;
+			font-size: .95em;
+		}
+	</style>
+</head>
+<body>
+	<h3 class="PageHeader">Xilinx Processor IP Library</h3>
+	<h1>
+Change log for microblaze, 4.00.a
+	</h1>
+	<hr class="whs1">
+
+<!CORE-CHANGE-DATA>
+<!bgn-change-data-table>
+<!--@BEGIN_CHANGELOG SUMMARY CORE_NAME=microblaze_v4_00_a STATE=ACTIVE LAST_UPDATED=8.1.2 -->
+<!--@END_CHANGELOG -->
+<table cellpadding="1" cellspacing="0" border="0"
+	style="text-align: left; vertical-align: top;"
+>
+	<tbody>
+		<!spacer><tr><td><p><br></p></td></tr>
+		<tr>
+			<td class="GreyBackground">
+				<p class="Level1Heading">
+Changes in 8.1.2, Update # 060
+				</p>
+				</a>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<p class="Level2Heading">
+8.1.2 - Changes in VHDL sources (.vhd)
+				</p>
+				<hr class="whs1">
+			</td>
+		</tr>
+		<tr>
+			<td>
+<!--@BEGIN_CHANGELOG EDK_I_SP2 CORE_NAME=microblaze_v4_00_a TYPE=vhdl --><pre>
+Cache RAMB instances:
+Modified instance generic to remove invalid conflict message in simulation.
+<!--@END_CHANGELOG --></pre>
+			</td>
+		</tr>
+		<!spacer><tr><td><p><br></p></td></tr>
+		<tr>
+			<td class="GreyBackground">
+				<p class="Level1Heading">
+Changes in 8.1.1, Update # 050
+				</p>
+				</a>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<p class="Level2Heading">
+8.1.1 - Changes in VHDL sources (.vhd)
+				</p>
+				<hr class="whs1">
+			</td>
+		</tr>
+		<tr>
+			<td>
+<!--@BEGIN_CHANGELOG EDK_I_SP1 CORE_NAME=microblaze_v4_00_a TYPE=vhdl --><pre>
+MSRSET/CLR instructions:
+Corrected case where MSRSET/CLR instruction placed after a
+non-delay slot branch instruction was executed even when
+branch was taken.
+<!--@END_CHANGELOG --></pre>
+			</td>
+		</tr>
+		<!spacer><tr><td><p><br></p></td></tr>
+		<tr>
+			<td class="GreyBackground">
+				<p class="Level1Heading">
+Changes in 8.1, Update # 040
+				</p>
+				</a>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<p class="Level2Heading">
+8.1 - Changes in VHDL sources (.vhd)
+				</p>
+				<hr class="whs1">
+			</td>
+		</tr>
+		<tr>
+			<td>
+<!--@BEGIN_CHANGELOG EDK_I CORE_NAME=microblaze_v4_00_a TYPE=vhdl --><pre>
+CacheLink Caches:
+Eliminated potential cache data corruption cause when using
+WIC/WDC instructions to partially invalidate I or D caches.
+
+Pattern Compare:
+Fixed bug where an interrupt taken the cycle where a pattern
+compare instruction is in the execute stage would cause r14 to
+be set to the pattern compare result rather than the interrupt
+return address.
+
+Ext_BRK and Ext_NM_BRK signal:
+Fixed case that resulted in a corrupt break vector
+("FFFF0018" instead of "0x00000018").
+<!--@END_CHANGELOG --></pre>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<p class="Level2Heading">
+8.1 - Changes in tool interface files (.mpd)
+				</p>
+				<hr class="whs1">
+			</td>
+		</tr>
+		<tr>
+			<td>
+<!--@BEGIN_CHANGELOG EDK_I CORE_NAME=microblaze_v4_00_a TYPE=mpd --><pre>
+Changed transparent CacheLink bus interfaces to use new
+MPD syntax.
+Added ISVALID tag on FSL bus interfaces to improve usability of
+MicroBlaze in Xilinx Platform Studio.
+<!--@END_CHANGELOG --></pre>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<p class="Level2Heading">
+8.1 - Changes in TCL files associated with core (.tcl)
+				</p>
+				<hr class="whs1">
+			</td>
+		</tr>
+		<tr>
+			<td>
+<!--@BEGIN_CHANGELOG EDK_I CORE_NAME=microblaze_v4_00_a TYPE=tcl --><pre>
+Added deprecated warning if using XCL with FSL buses.
+<!--@END_CHANGELOG --></pre>
+			</td>
+		</tr>
+		<!spacer><tr><td><p><br></p></td></tr>
+		<tr>
+			<td class="GreyBackground">
+				<p class="Level1Heading">
+Changes in 7.1.2, Update # 030
+				</p>
+				</a>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<p class="Level2Heading">
+7.1.2 - Changes in VHDL sources (.vhd)
+				</p>
+				<hr class="whs1">
+			</td>
+		</tr>
+		<tr>
+			<td>
+<!--@BEGIN_CHANGELOG EDK_H_SP2 CORE_NAME=microblaze_v4_00_a TYPE=vhdl --><pre>
+Multiplier:
+Changed DSP48 pipeline registers to improve performance on Virtex 4.
+
+Divider:
+Fixed invalid result for idivu when MSb of denominator is set.
+
+XCL:
+Fixed issue when FIFO becomes full between address and data.
+
+MSRset/MSRclr:
+Fixed issue where FSR/EAR/ESR was stored to Rd instead of MSR.
+
+Virtex/Virtex-E/Spartan-II/Spartan-IIE:
+Fixed floorplan RLOC issue.
+Fixed issue with FSL and barrel shifter producing invalid result.
+
+Spartan 3/Spartan 3E/Virtex4:
+Fixed floorplan RLOC cache issue with large number of tag bits.
+<!--@END_CHANGELOG --></pre>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<p class="Level2Heading">
+7.1.2 - Changes in TCL files associated with core (.tcl)
+				</p>
+				<hr class="whs1">
+			</td>
+		</tr>
+		<tr>
+			<td>
+<!--@BEGIN_CHANGELOG EDK_H_SP2 CORE_NAME=microblaze_v4_00_a TYPE=tcl --><pre>
+FPU:
+Produce error if FPU is enabled on Virtex, Virtex-E, Spartan2, or
+Spartan2E.
+
+Cache:
+Fixed TCL error when baee address is greater than high address.
+Added DRC check for Spartan3, Spartan3E, Virtex4 Data Cache XCL.
+<!--@END_CHANGELOG --></pre>
+			</td>
+		</tr>
+		<!spacer><tr><td><p><br></p></td></tr>
+		<tr>
+			<td class="GreyBackground">
+				<p class="Level1Heading">
+Changes in 7.1.1, Update # 020
+				</p>
+				</a>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<p class="Level2Heading">
+7.1.1 - Changes in tool interface files (.mpd)
+				</p>
+				<hr class="whs1">
+			</td>
+		</tr>
+		<tr>
+			<td>
+<!--@BEGIN_CHANGELOG EDK_H_SP1 CORE_NAME=microblaze_v4_00_a TYPE=mpd --><pre>
+Added full support for spartan3e.
+<!--@END_CHANGELOG --></pre>
+			</td>
+		</tr>
+		<!spacer><tr><td><p><br></p></td></tr>
+		<tr>
+			<td class="GreyBackground">
+				<p class="Level1Heading">
+Changes in 7.1, Update # 010
+				</p>
+				</a>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<p class="Level2Heading">
+7.1 - Changes in VHDL sources (.vhd)
+				</p>
+				<hr class="whs1">
+			</td>
+		</tr>
+		<tr>
+			<td>
+<!--@BEGIN_CHANGELOG EDK_H CORE_NAME=microblaze_v4_00_a TYPE=vhdl --><pre>
+New revision.
+Adds floating point unit.
+Adds pattern compare instructions.
+Hardware multiplier is now optional.
+Improved floorplan for Spartan 3 and Virtex 4.
+<!--@END_CHANGELOG --></pre>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<p class="Level2Heading">
+7.1 - Changes in tool interface files (.mpd)
+				</p>
+				<hr class="whs1">
+			</td>
+		</tr>
+		<tr>
+			<td>
+<!--@BEGIN_CHANGELOG EDK_H CORE_NAME=microblaze_v4_00_a TYPE=mpd STATE=ACTIVE --><pre>
+Added in 7.1.
+<!--@END_CHANGELOG --></pre>
+			</td>
+		</tr>
+	</tbody>
+</table>
+<!end-change-data-table>
+
+	<p class="Copyright">
+	Copyright &copy; 1995-2006 Xilinx, Inc. All rights reserved.
+	</p>
+</body>
+</html>

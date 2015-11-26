@@ -1,0 +1,1 @@
+ -p spartan3 -lang vhdl -lp pcores/    -pe microblaze_0 software/executable.elf -s mti
