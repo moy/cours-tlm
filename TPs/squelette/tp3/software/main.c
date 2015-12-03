@@ -113,13 +113,13 @@ void game_of_life() {
 
 /* Gosper Glide Gun */
 /* Merci à Carle Alexandre et Gonzalez Julien, SLE 3A en
- * 2009-2010 */
+ * 2009-2010 et Thibaud Backenstrass, SLE 3A en 2015. */
 void draw_gun(int x, int y) {
 	/* Left square */
-	set_pixel(old_img_addr, x + 0, y + 5, 1);
-	set_pixel(old_img_addr, x + 0, y + 6, 1);
 	set_pixel(old_img_addr, x + 1, y + 5, 1);
 	set_pixel(old_img_addr, x + 1, y + 6, 1);
+	set_pixel(old_img_addr, x + 2, y + 5, 1);
+	set_pixel(old_img_addr, x + 2, y + 6, 1);
 
 	set_pixel(old_img_addr, x + 11, y + 5, 1);
 	set_pixel(old_img_addr, x + 11, y + 6, 1);
