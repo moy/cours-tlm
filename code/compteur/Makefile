@@ -5,9 +5,7 @@
 SYSTEMC = $(SYSTEMCROOT)
 
 # guess target os name used by systemc's configure
-ARCH = $(shell $(SYSTEMC)/config/config.guess | \
-	sed -e 's/x86_64-.*-linux-gnu/linux64/' \
-	    -e 's/i.86-.*-linux-gnu/linux/')
+ARCH = $(shell uname -m | sed -e 's/x86_64.*/linux64/' -e 's/i.86.*/linux/')
 
 INCLUDES = -I. -I$(SYSTEMC)/include
 CC = g++
