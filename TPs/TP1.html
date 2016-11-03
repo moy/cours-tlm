@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+</head>
+<body>
+<p>Si ce n’est pas déjà fait, récupérer le dépôt Git du projet (cf la page du wiki <a href="http://ensiwiki.ensimag.fr/index.php/TLM">http://ensiwiki.ensimag.fr/index.php/TLM</a>). Placez-vous dans le répertoire du projet et faites un <code>git pull</code> pour vous assurer d’avoir la dernière version.</p>
+<p>Pour ce TP et les suivants, les Makefiles fournis supposent que vous avez défini correctement un certain nombre de variables d’environnement, et que vous utilisez GNU Make. Pour avoir tout ceci, sur une machine de l’Ensimag, il suffit de faire</p>
+<pre><code>source TPs/setup-ensimag.sh</code></pre>
+<p>Si vous travaillez sur votre machine personnelle, suivez les instructions du wiki pour installer SystemC et TLM-2, puis adaptez le fichier <code>setup-ensimag.sh</code> en fonction.</p>
+<p>Pour commencer, faites:</p>
+<pre><code>cd TPs/squelette/tp1/
+make</code></pre>
+<p>Vous devriez obtenir une erreur à l’édition de liens. C’est normal, vous n’avez pas encore écrit la fonction <code>sc_main</code> dont SystemC a besoin.</p>
+<h2 id="objectif" class="unnumbered">Objectif</h2>
+<figure>
+<embed src="Figures/plateforme.pdf" /><figcaption>Plateforme à réaliser</figcaption>
+</figure>
+<p>[figPlateforme]</p>
+<p>On cherche à créer la plate-forme (modélisation de système sur puce) représentée figure [figPlateforme]. Le composant <code>Memory</code> doit modéliser le comportement d’une mémoire réelle. La mémoire est une mémoire 32 bits, on ne peut accéder qu’aux mots entiers (pas de byte-enable). Les adresses circulant sur le bus sont cependant en octets. Les accès mémoires non-alignés sont interdits (lèvent une erreur au niveau du bus). Le composant <code>Generator1</code> servant à générer des tests permettant de valider le fonctionnement de la mémoire (il s’appelle comme ceci parce qu’il ne fait rien de bien intelligent, mais qu’il <em>génère</em> du trafic).</p>
+<p>Il est conseillé de compiler son code et de le tester régulièrement, et pas seulement quand cela est explicitement demandé dans l’énoncé, de façon à écluser au fur et à mesure les erreurs de syntaxe éventuelles.</p>
+<p>Il est tout à fait possible (et même recommandé !) d’utiliser <code>git commit</code> pour sauvegarder périodiquement votre travail. Les prochains <code>git pull</code> récupéreront la dernière version du cours et la fusionnera avec votre travail. Vous pouvez même travailler à plusieurs avec ce dépôt Git (des explications sont disponibles sur EnsiWiki).</p>
+<h2 id="préliminaire" class="unnumbered">Préliminaire</h2>
+<p>Pour vous aider, deux exemples de code sont fournis dans le répertoire <code>code/</code> :</p>
+<ul>
+<li><p><code>ensitlm-mini</code> : exemple minimaliste de connexion d’un initiateur à une cible via un bus, en un seul fichier (pas très propre, mais pratique pour avoir une vue d’ensemble).</p></li>
+<li><p><code>ensitlm-mini-multi</code> : le même exemple, avec un découpage 1 classe = 1 fichier <code>.h</code> + 1 fichier <code>.cpp</code>.</p></li>
+</ul>
+<p>Compiler et exécuter ces programmes. Parcourez rapidement le code : vous pourrez vous en inspirer pour la suite du TP.</p>
+<h2 id="question-1-création-du-générateur-de-transactions" class="unnumbered">Question 1 : création du générateur de transactions</h2>
+<ul>
+<li><p>Créer un module SystemC <code>Generator</code>, comportant un socket initiateur ENSITLM « <code>initiator</code> » et un processus de type <code>SC_THREAD</code>.</p></li>
+</ul>
+<p>Remarque : pour des raisons de clarté, ne mettre qu’une classe par fichier .h et .cpp et appeler les fichiers du nom de la classe. Ici, <code>generator.h</code> et <code>generator.cpp</code> contiendront la classe « <code>Generator</code> ».</p>
+<ul>
+<li><p>Dans un fichier <code>sc_main.cpp</code> :</p>
+<ul>
+<li><p>Instancier le module sous le nom « <code>Generator1</code> ». (cf cours).</p></li>
+<li><p>Instancier un objet de la classe <code>bus</code>, sous le nom « <code>Bus</code> ».</p></li>
+<li><p>Réaliser la connexion générateur/bus.</p></li>
+<li><p>Utiliser la commande <code>sc_start();</code> pour démarrer la simulation après les instanciations et les connexions.</p></li>
+</ul></li>
+</ul>
+<ul>
+<li><p>Compiler et tester. Pour l’instant, le générateur est connecté à un bus sur lequel aucun composant cible n’est connecté. En d’autres termes, il peut parler, mais personne n’écoute! Vous devriez donc avoir le message d’erreur approprié.</p></li>
+</ul>
+<h2 id="question-2-création-de-la-mémoire" class="unnumbered">Question 2 : création de la mémoire</h2>
+<ul>
+<li><p>Créer un module SystemC « <code>Memory</code> », comportant un socket cible ENSITLM « <code>target</code> » (pour l’instant, il s’agit d’une coquille presque vide).</p></li>
+<li><p>Instancier la mémoire dans <code>sc_main.cpp</code> sous le nom « <code>Memory</code> » et la connecter au bus.</p></li>
+<li><p>Enregistrer la plage d’adresses [0x10000000, 0x100000FF] pour le composant Memory (à l’aide de la fonction <code>map()</code> du bus).</p></li>
+<li><p>Compiler et tester. Si vous n’avez pas encore défini les méthodes <code>read</code> et <code>write</code>, gcc va refuser de compiler, et il aura raison! Pour l’instant, on se contentera d’une implémentation vide pour ces fonctions.</p></li>
+<li><p>Dans le module générateur, réaliser une suite de 10 écritures d’une valeur quelconque en commençant à l’adresse <code>0x10000000</code> en incrémentant à chaque pas l’adresse. Tester le statut en retour de transaction et afficher un message en cas d’erreur.</p></li>
+<li><p>Compiler et tester. Réessayer avec des adresses hors de la plage déclarée. Vous devriez obtenir un premier message d’erreur : le bus va refuser de router les transactions !</p></li>
+<li><p>Dans le module mémoire, afficher un message lorsque qu’une transaction est effectuée, en précisant le nom du composant, le type de transaction (read/write), l’adresse et la données écrite/renvoyée.<br />Pour afficher le nom du composant, utiliser la méthode <code>name()</code> appelable directement dans le module.</p></li>
+<li><p>Compiler et tester.</p></li>
+</ul>
+<h2 id="question-3-comportement-de-la-mémoire" class="unnumbered">Question 3 : comportement de la mémoire</h2>
+<ul>
+<li><p>Dans le module mémoire, rajouter un attribut <code>storage</code> de type <code>ensitlm::data_t *</code> (tableau de <code>ensitlm::data_t</code>).</p></li>
+<li><p>Modifier le constructeur de façon à ce qu’il prenne en paramètre additionnel la taille de la mémoire à construire.</p></li>
+<li><p>Dans le constructeur, allouer <em>exactement</em> la taille mémoire passée en paramètre (on fixe comme convention que la taille passée en paramètre est en octets, et on s’autorise à utiliser le fait que <code>sizeof(ensitlm::data_t) = 4</code>, i.e. les données sont des entiers sur 32 bits) et stocker le pointeur dans <code>storage</code>.</p></li>
+<li><p>Rajouter un attribut <code>size</code> pour stocker également la taille mémoire dans le module.</p></li>
+<li><p>Créer un destructeur pour la classe <code>Memory</code> et implémenter la libération de la mémoire avec <code>delete</code>.</p></li>
+<li><p>Dans l’instanciation de la mémoire (<code>sc_main.cpp</code>), fournir en paramètre additionnel la taille de la plage réservée à la mémoire.</p></li>
+<li><p>Compiler et tester.</p></li>
+<li><p>Modifier maintenant les méthodes correspondant aux accès transactions de façon à réaliser la fonctionnalité attendue : mémorisation des valeurs. Attention: un accès à l’adresse 0 renvoie, sur 32 bits, les 4 octets correspondant aux adresses 0, 1, 2, 3. Un accès aux adresses 1, 2 et 3 est interdit, un accès à l’adresse 4 renvoie les 4 octets suivants, ... Bien entendu, il ne faut pas gaspiller de mémoire. En d’autres termes, un accès à l’adresse 0 doit accéder à la case 0 du tableau <code>storage</code>, un accès à l’adresse 4 à la case 1, l’adresse 8 à la case 2, …</p></li>
+</ul>
+<h2 id="question-4-écriture-du-test-de-la-mémoire" class="unnumbered">Question 4 : écriture du test de la mémoire</h2>
+<ul>
+<li><p>Modifier le code du générateur de façon à écrire des valeurs différentes à chaque adresse et à balayer l’intégralité de la mémoire.</p></li>
+<li><p>À la suite des écritures, réaliser des accès en lecture et vérifier automatiquement si la mémoire fonctionne correctement. Afficher un message d’erreur en cas de problème.</p></li>
+</ul>
+<h2 id="question-5-vérification-dadresse" class="unnumbered">Question 5 : vérification d’adresse</h2>
+<ul>
+<li><p>Diminuer la taille de la mémoire instanciée. Ne pas changer la plage d’adresse donnée au <code>bus</code> ni le générateur.</p></li>
+<li><p>Compiler et tester. Cette fois-ci, il est probable que la plateforme ne donne pas d’erreur lorsqu’on fait des accès en dehors de la plage allouée. En fait, on retombe sur un problème de C++ classique : un accès en dehors d’un tableau alloué peut faire n’importe quoi, y compris marcher « par chance », ou faire un « segmentation fault ». L’outil <code>valgrind</code> peut vous aider à voir ce qu’il se passe (vous aurez un warning <span>Warning: client switching stacks?</span>, vous pouvez l’ignorer).</p></li>
+<li><p>Modifier la mémoire de façon à inclure un test sur les adresses et à renvoyer un statut erreur en cas d’adresse invalide (trop grande).</p></li>
+<li><p>Compiler et tester.</p></li>
+</ul>
+</body>
+</html>
