@@ -56,7 +56,7 @@ test_ok
 
 start_test SDL
 command -v sdl-config >/dev/null || die "Can't find sdl-config. Check that you have the SDL library installed."
-g++ `sdl-config --cflags` `sdl-config --libs` "$DIR"/test-sdl.cpp -o test-sdl || die "Can't compile an SDL program."
+g++ "$DIR"/test-sdl.cpp `sdl-config --cflags` `sdl-config --libs` -o test-sdl || die "Can't compile an SDL program."
 ./test-sdl || die "Can't execute an SDL program."
 test_ok
 
