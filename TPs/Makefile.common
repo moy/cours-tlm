@@ -47,7 +47,10 @@ CFLAGS = -O3 -g -Wall -Wextra
 LD = $(CXX)
 SC_LIB =  -Wl,-Bstatic -lsystemc -Wl,-Bdynamic
 LDFLAGS = $(CXXFLAGS)
-LDLIBS  = -L/usr/X11R6/lib -lX11
+LDLIBS = 
+ifdef WITH_X11
+LDLIBS = -L/usr/X11R6/lib -lX11
+endif
 LDLIBS += $(SDLLIB)
 LDLIBS += -L$(SYSTEMC)/lib-$(ARCH) $(SC_LIB) -pthread
 
