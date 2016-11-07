@@ -45,7 +45,7 @@ CC = gcc
 CFLAGS = -O3 -g -Wall -Wextra
 
 LD = $(CXX)
-SC_LIB =  -Wl,-Bstatic -lsystemc -Wl,-Bdynamic
+SC_LIB =  -Xlinker -Bstatic -lsystemc -Xlinker -Bdynamic
 LDFLAGS = $(CXXFLAGS)
 LDLIBS = 
 ifdef WITH_X11

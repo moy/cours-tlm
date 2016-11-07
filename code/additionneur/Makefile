@@ -17,7 +17,7 @@ CXXFLAGS = -Wno-deprecated -O0
 
 LD = $(CC)
 LDFLAGS = 
-LDLIBS = -L. -L$(SYSTEMC)/lib-$(ARCH) -Wl,-Bstatic -lsystemc -Wl,-Bdynamic -lm -pthread
+LDLIBS = -L. -L$(SYSTEMC)/lib-$(ARCH) -Xlinker -Bstatic -lsystemc -Xlinker -Bdynamic -lm -pthread
 
 SRCS = $(wildcard *.cpp)
 DEPS = $(SRCS:%.cpp=%.d)

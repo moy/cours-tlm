@@ -8,5 +8,5 @@ minimal: minimal.cpp
 		-L $(SYSTEMCROOT)/lib-gccsparcOS5/ \
 		-L $(SYSTEMCROOT)/lib-linux/ \
 		-L $(SYSTEMCROOT)/lib-linux64/ \
-		-Wl,-Bstatic -lsystemc -Wl,-Bdynamic -pthread \
+		-Xlinker -Bstatic -lsystemc -Xlinker -Bdynamic -pthread \
 	-o minimal

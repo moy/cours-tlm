@@ -42,7 +42,7 @@ start_test SystemC compilation
 g++ "$DIR"/test-systemc.cpp \
     -I "$SYSTEMCROOT"/include/ \
     -L "$SYSTEMCROOT/lib-$ARCH" \
-    -Wl,-Bstatic -lsystemc -Wl,-Bdynamic -pthread \
+    -Xlinker -Bstatic -lsystemc -Xlinker -Bdynamic -pthread \
     -o test-systemc || die "Can't compile a SystemC program"
 ./test-systemc 2>/dev/null > actual || die "Can't execute SystemC program"
 echo 'SystemC works!' > expected
@@ -63,7 +63,7 @@ test_ok
 start_test MicroBlaze installation
 test -n "$CROSS_COMPILE" || die "Please, set \$CROSS_COMPILE to e.g. microblaze-unknown-linux-gnu-"
 check_cmd () {
-    command -v "$CROSS_COMPILE""$1" >/dev/null || die "Can't find $CROSS_COMPILEg++"
+    command -v "$CROSS_COMPILE""$1" >/dev/null || die "Can't find ${CROSS_COMPILE}g++"
 }
 check_cmd ld
 check_cmd gcc
