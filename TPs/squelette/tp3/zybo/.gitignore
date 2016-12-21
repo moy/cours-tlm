@@ -1,0 +1,4 @@
+# Vivado temporary stuff (PID file, ...)
+/.Xil/
+*.jou
+vivado_pid*.str

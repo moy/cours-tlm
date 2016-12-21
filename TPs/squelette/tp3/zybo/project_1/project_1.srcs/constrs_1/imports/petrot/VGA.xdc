@@ -1,0 +1,55 @@
+## Clock signal at 125MHz
+create_clock -add -name sys_clk_pin -period 8.00 -waveform {0 4} [get_ports clk]
+set_property PACKAGE_PIN L16      [get_ports {clk}]
+set_property IOSTANDARD LVCMOS33  [get_ports {clk}]
+
+## Reset button
+set_property  PACKAGE_PIN R18     [get_ports {reset_rtl}]
+set_property  IOSTANDARD LVCMOS33 [get_ports {reset_rtl}]
+
+## Gpio exit button
+set_property  PACKAGE_PIN Y16     [get_ports {btn3}]
+set_property  IOSTANDARD LVCMOS33 [get_ports {btn3}]
+
+##LEDs
+set_property PACKAGE_PIN M14 [get_ports {led0}]
+set_property IOSTANDARD LVCMOS33 [get_ports {led0}]
+
+## VGA Connector
+set_property  PACKAGE_PIN M19     [get_ports {r[0]}]
+set_property  PACKAGE_PIN L20     [get_ports {r[1]}]
+set_property  PACKAGE_PIN J20     [get_ports {r[2]}]
+set_property  PACKAGE_PIN G20     [get_ports {r[3]}]
+set_property  PACKAGE_PIN F19     [get_ports {r[4]}]
+set_property  PACKAGE_PIN H18     [get_ports {g[0]}]
+set_property  PACKAGE_PIN N20     [get_ports {g[1]}]
+set_property  PACKAGE_PIN L19     [get_ports {g[2]}]
+set_property  PACKAGE_PIN J19     [get_ports {g[3]}]
+set_property  PACKAGE_PIN H20     [get_ports {g[4]}]
+set_property  PACKAGE_PIN F20     [get_ports {g[5]}]
+set_property  PACKAGE_PIN P20     [get_ports {b[0]}]
+set_property  PACKAGE_PIN M20     [get_ports {b[1]}]
+set_property  PACKAGE_PIN K19     [get_ports {b[2]}]
+set_property  PACKAGE_PIN J18     [get_ports {b[3]}]
+set_property  PACKAGE_PIN G19     [get_ports {b[4]}]
+set_property  PACKAGE_PIN P19     [get_ports {hsync}]
+set_property  PACKAGE_PIN R19     [get_ports {vsync}]
+
+set_property  IOSTANDARD LVCMOS33 [get_ports {r[0]}]
+set_property  IOSTANDARD LVCMOS33 [get_ports {r[1]}]
+set_property  IOSTANDARD LVCMOS33 [get_ports {r[2]}]
+set_property  IOSTANDARD LVCMOS33 [get_ports {r[3]}]
+set_property  IOSTANDARD LVCMOS33 [get_ports {r[4]}]
+set_property  IOSTANDARD LVCMOS33 [get_ports {g[0]}]
+set_property  IOSTANDARD LVCMOS33 [get_ports {g[1]}]
+set_property  IOSTANDARD LVCMOS33 [get_ports {g[2]}]
+set_property  IOSTANDARD LVCMOS33 [get_ports {g[3]}]
+set_property  IOSTANDARD LVCMOS33 [get_ports {g[4]}]
+set_property  IOSTANDARD LVCMOS33 [get_ports {g[5]}]
+set_property  IOSTANDARD LVCMOS33 [get_ports {b[0]}]
+set_property  IOSTANDARD LVCMOS33 [get_ports {b[1]}]
+set_property  IOSTANDARD LVCMOS33 [get_ports {b[2]}]
+set_property  IOSTANDARD LVCMOS33 [get_ports {b[3]}]
+set_property  IOSTANDARD LVCMOS33 [get_ports {b[4]}]
+set_property  IOSTANDARD LVCMOS33 [get_ports {hsync}]
+set_property  IOSTANDARD LVCMOS33 [get_ports {vsync}]

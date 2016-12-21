@@ -1,0 +1,16 @@
+Copyright 1986-2015 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2015.3 (lin64) Build 1368829 Mon Sep 28 20:06:39 MDT 2015
+| Date         : Thu Apr 14 14:17:24 2016
+| Host         : pomahaka running 64-bit Debian GNU/Linux 8.3 (jessie)
+| Command      : upgrade_ip
+| Device       : xc7z010clg400-1
+------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'design_1_blk_mem_gen_0_0'
+
+1. Summary
+----------
+
+SUCCESS in the upgrade of design_1_blk_mem_gen_0_0 from xilinx.com:ip:blk_mem_gen:8.2 (Rev. 6) to xilinx.com:ip:blk_mem_gen:8.3
+

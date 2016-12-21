@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+</head>
+<body>
+<h2 id="introduction" class="unnumbered">Introduction</h2>
+<p>This document describes the specifications of the Video Graphics Array (VGA) core for the On-Chip AXI Bus.</p>
+<p>The VGA is a 32-bit master-slave module that attaches to the AXI.</p>
+<h2 id="features" class="unnumbered">Features</h2>
+<ul>
+<li><p>Supports 32-bit AXI v2.0 bus interface</p></li>
+<li><p>Monochrome (1 bit per pixel, 32-pixel per word)</p></li>
+<li><p>Supports 640 x 480 video resolution</p></li>
+<li><p>Generates 60 Hz vertical synchronization</p></li>
+<li><p>Configurable start address</p></li>
+<li><p>Support for interruptions and polling</p></li>
+</ul>
+<h2 id="functional-description" class="unnumbered">Functional Description</h2>
+<figure>
+<embed src="Figures/vga_words.pdf" /><figcaption>Video buffer data format</figcaption>
+</figure>
+<p>[figMemory]</p>
+<p>After reset, the VGA is initially idle. User sets the start address by writing to the <code>CFG</code> register. If the value written to this register is different than <code>0x0</code>, then the VGA becomes enabled.</p>
+<p>When enabled, the VGA continuously reads 32-bit words, starting from the start address (value of the <code>CFG</code> register), and incrementing until the end of the video buffer. It drives the color signals <code>RED</code>, <code>GREEN</code> and <code>BLUE</code> and the horizontal synchronization <code>HSYNC</code>.</p>
+<p>Each time the VGA reaches the end, it drives the vertical synchronization signal <code>VSYNC</code> and sends an interruption using the <code>IP2INTC_Irpt</code> signal. It also sets the <code>INT</code> register to <code>0x1</code>. The <code>INT</code> register can be cleared by writing <code>0x1</code> to it.</p>
+<p>The VGA can be idled by writing <code>0x0</code> to the <code>CFG</code> register.</p>
+<figure>
+<embed src="Figures/vga.pdf" /><figcaption>VGA Block diagram</figcaption>
+</figure>
+<h2 id="programming-model" class="unnumbered">Programming Model</h2>
+<h3 id="modes" class="unnumbered">Modes</h3>
+<p>The VGA provides the following modes:</p>
+<ul>
+<li><p>IDLE: when <code>CFG</code> register is <code>0x0</code>. In this mode, a test pattern is displayed (vertical lines).</p></li>
+<li><p>ENABLED: otherwise</p></li>
+</ul>
+<h3 id="register-offsets" class="unnumbered">Register offsets</h3>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: center;"><strong>Offset</strong></th>
+<th style="text-align: center;"><strong>Size</strong></th>
+<th style="text-align: center;"><strong>Type</strong></th>
+<th style="text-align: left;"><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>CFG</code></td>
+<td style="text-align: center;"><code>0x00</code></td>
+<td style="text-align: center;">Word</td>
+<td style="text-align: center;">R/W</td>
+<td style="text-align: left;">Configuration reg.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>STT</code></td>
+<td style="text-align: center;"><code>0x04</code></td>
+<td style="text-align: center;">Word</td>
+<td style="text-align: center;">R</td>
+<td style="text-align: left;">Status register</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>INT</code></td>
+<td style="text-align: center;"><code>0x08</code></td>
+<td style="text-align: center;">Word</td>
+<td style="text-align: center;">R/W</td>
+<td style="text-align: left;">Interrupt register</td>
+</tr>
+</tbody>
+</table>
+<h2 id="registers-descriptions" class="unnumbered">Registers descriptions</h2>
+<h3 id="configuration-register" class="unnumbered">Configuration register</h3>
+<p>The configuration registers holds the start address of the video buffer. The value should be modified soon after the vertical synchronization to give best results.</p>
+<h3 id="status-register" class="unnumbered">Status register</h3>
+<p>The status register is not implemented.</p>
+<h3 id="interrupt-register" class="unnumbered">Interrupt register</h3>
+<p>The interrupt register is set to <code>0x1</code> after a vertical synchronization and can be cleared by writing <code>0x1</code> to it.</p>
+</body>
+</html>

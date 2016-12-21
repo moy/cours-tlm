@@ -1,0 +1,14 @@
+vivado ./project_1/project_1.xpr
+
+Export Hardware and launch Software Development Kit :
+http://www.xilinx.com/support/documentation/sw_manuals/xilinx2015_1/SDK_Doc/SDK_tasks/sdk_t_export_hwspec.html
+
+File -> Launch SDK
+
+Right click in projects, New -> Project / Xilinx -> Application Project.
+
+XDC constraints template :
+https://github.com/Digilent/ZYBO/blob/master/Resources/XDC/ZYBO_Master.xdc
+
+Device :
+xc7z010clg400-1
