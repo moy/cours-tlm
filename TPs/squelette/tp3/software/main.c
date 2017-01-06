@@ -162,11 +162,16 @@ void draw_gun(int x, int y) {
 
 int main() {
 	printf("-- boot complete --\r\n");
+	/* Program timer: period (must come early) */
 	write_mem(TIMER_BASEADDR + TIMER_0_TLR_OFFSET, 0x08000000);
-	printf("-- OK -- \r\n");
+
+	/* Configure and launch timer */
+	write_mem(TIMER_BASEADDR + TIMER_0_CSR_OFFSET,
+		  BIT(TIMER_TINT) | BIT(TIMER_ENT) | BIT(TIMER_ENIT) |
+		  BIT(TIMER_ARHT) | BIT(TIMER_UDT));
 
 	refresh = 0;
-	old_img_addr = 0x20000 - (VGA_LINE * VGA_HEIGHT) / CHAR_BIT;
+	old_img_addr = 0x20000 - 1024 - (VGA_LINE * VGA_HEIGHT) / CHAR_BIT;
 	new_img_addr = old_img_addr - (VGA_LINE * VGA_HEIGHT) / CHAR_BIT;
 
 	clr_screen(old_img_addr);
@@ -187,26 +192,17 @@ int main() {
 	/* pixel alone, will die after the first iteration */
 	set_pixel(old_img_addr, 32, 30, 1);
 
-	/* Program timer: period */
-	write_mem(TIMER_BASEADDR + TIMER_0_TLR_OFFSET, 0x08000000);
+	/* start vga */
+	write_mem(VGA_BASEADDR + VGA_CFG_OFFSET, old_img_addr);
 
-	/* Configure and launch timer */
-	write_mem(TIMER_BASEADDR + TIMER_0_CSR_OFFSET,
-		  BIT(TIMER_TINT) | BIT(TIMER_ENT) | BIT(TIMER_ENIT) |
-		  BIT(TIMER_ARHT) | BIT(TIMER_UDT));
+	/* program gpio to input */
+	write_mem(GPIO_BASEADDR + GPIO_TRI_OFFSET, GPIO_INPUT);
 
 	/* Enable and acknowledge all interrupts */
 	write_mem(INTC_BASEADDR + XIN_MER_OFFSET, ~0);
 	write_mem(INTC_BASEADDR + XIN_IER_OFFSET, ~0);
 	write_mem(INTC_BASEADDR + XIN_IAR_OFFSET, ~0);
-
-	/* start vga */
-	write_mem(VGA_BASEADDR + VGA_CFG_OFFSET, old_img_addr);
-
 	microblaze_enable_interrupts();
-
-	/* program gpio to input */
-	write_mem(GPIO_BASEADDR + GPIO_TRI_OFFSET, GPIO_INPUT);
 
 	while (1) {
 		/* glider */

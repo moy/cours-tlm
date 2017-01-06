@@ -7,6 +7,7 @@
 
 TIMER::TIMER(sc_core::sc_module_name name, sc_core::sc_time p)
     : sc_core::sc_module(name), period(p) {
+	refresh[0] = refresh[1] = false;
 	SC_METHOD(timer0);
 	dont_initialize();
 	sensitive << csr_event[0];
@@ -24,7 +25,7 @@ TIMER::TIMER(sc_core::sc_module_name name, sc_core::sc_time p)
 
 #ifdef DEBUG
 	std::cout << "Debug: " << sc_module::name()
-	          << ": Xilinx OPB Timer/Counter (v1.00b) TLM model\n";
+	          << ": Xilinx AXI Timer/Counter (v1.00) TLM model\n";
 #endif
 }
 

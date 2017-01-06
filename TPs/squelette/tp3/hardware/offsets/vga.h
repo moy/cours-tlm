@@ -2,7 +2,7 @@
 #define VGA_H_OFFSETS
 
 #define VGA_WIDTH     640 /* pixels */
-#define VGA_LINE     1024 /* pixels */
+#define VGA_LINE  VGA_WIDTH /* pixels */
 #define VGA_HEIGHT    480 /* pixels */
 #define VGA_FREQUENCY  60 /* Hz */
 
