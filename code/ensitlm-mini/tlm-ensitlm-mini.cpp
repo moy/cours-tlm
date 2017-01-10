@@ -23,7 +23,7 @@ struct initiator : sc_module {
 		ensitlm::addr_t addr = 4;
 		while (true) {
 			cout << "Entrer un nombre" << endl;
-			cin >> val;;
+			cin >> val;
 			cout << "je vais envoyer : " << std::dec << val << endl;
 			socket.write(addr, val);
 		}
@@ -36,19 +36,19 @@ struct initiator : sc_module {
 struct target : sc_module {
 	ensitlm::target_socket<target> socket;
 	tlm::tlm_response_status write(const ensitlm::addr_t &a,
-				       const ensitlm::data_t &d) {
+	                               const ensitlm::data_t &d) {
 		cout << "j'ai reçu : " << d << endl;
 		return tlm::TLM_OK_RESPONSE;
 	}
-	tlm::tlm_response_status read (const ensitlm::addr_t &a,
-				       /* */ ensitlm::data_t &d) {
+	tlm::tlm_response_status read(const ensitlm::addr_t &a,
+	                              /* */ ensitlm::data_t &d) {
 		SC_REPORT_ERROR("TLM", "non implémenté");
 		abort();
 	}
-	SC_CTOR(target) {/* */}
+	SC_CTOR(target) { /* */	}
 };
 
-int sc_main (int argc, char **argv) {
+int sc_main(int argc, char **argv) {
 	/*
 	 +---------+	+-------------+	   +--------+
 	 |	  +++  +-+	     +++  +++	    |

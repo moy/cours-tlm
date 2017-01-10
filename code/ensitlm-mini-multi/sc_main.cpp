@@ -8,7 +8,7 @@
 #include "target.h"
 #include "bus.h"
 
-int sc_main (int argc, char ** argv) {
+int sc_main(int argc, char **argv) {
 	(void)argc;
 	(void)argv;
 	/*

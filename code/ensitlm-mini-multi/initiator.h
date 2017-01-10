@@ -11,5 +11,4 @@ struct initiator : sc_core::sc_module {
 	void thread(void);
 
 	SC_CTOR(initiator);
-
 };

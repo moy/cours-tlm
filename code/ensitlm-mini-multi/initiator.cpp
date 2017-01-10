@@ -12,13 +12,12 @@ void initiator::thread(void) {
 	ensitlm::addr_t addr = 4;
 	while (true) {
 		cout << "Entrer un nombre" << endl;
-		cin >> val;;
+		cin >> val;
 		cout << "je vais envoyer : " << std::dec << val << endl;
 		socket.write(addr, val);
 	}
 }
 
-initiator::initiator(sc_core::sc_module_name name)
-	: sc_core::sc_module(name) {
+initiator::initiator(sc_core::sc_module_name name) : sc_core::sc_module(name) {
 	SC_THREAD(thread);
 }

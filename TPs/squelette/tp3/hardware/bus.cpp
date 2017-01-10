@@ -87,8 +87,8 @@ tlm::tlm_response_status Bus::read(ensitlm::addr_t a, ensitlm::data_t &d) {
 	    initiator.read(a - (*it).first.begin, d, (*it).second);
 
 #ifdef DEBUG
-	std::cout << "Debug: " << name() << ": read access at " << std::showbase
-	          << std::hex << a << " (data: " << d << ")\n";
+	std::cout << "Debug: " << name() << ": read access at " << std::hex
+	          << std::showbase << a << " (data: " << d << ")\n";
 #endif
 
 	return s;
@@ -108,8 +108,8 @@ tlm::tlm_response_status Bus::write(ensitlm::addr_t a, ensitlm::data_t d) {
 	}
 
 #ifdef DEBUG
-	std::cout << "Debug: " << name() << ": write access at "
-	          << std::showbase << std::hex << a << " (data: " << d << ")\n";
+	std::cout << "Debug: " << name() << ": write access at " << std::hex
+	          << std::showbase << a << " (data: " << d << ")\n";
 #endif
 
 	tlm::tlm_response_status s =
